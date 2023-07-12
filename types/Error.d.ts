@@ -1,0 +1,4 @@
+
+interface ErrorMessage {
+    error: string,
+}

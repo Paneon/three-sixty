@@ -34,7 +34,8 @@
           }
         }
       ],
-      ["@babel/preset-typescript",
+      [
+        "@babel/preset-typescript",
         {
           "allowNamespaces": true
         }
@@ -52,6 +53,7 @@
     "jest": "^26.0.1"
   },
   "dependencies": {
-    "@types/google-apps-script": "^1.0.14"
+    "@types/google-apps-script": "^1.0.14",
+    "typescript": "^5.1.6"
   }
 }

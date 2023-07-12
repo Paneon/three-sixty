@@ -1,5 +1,9 @@
+import {Constants} from "./Constants";
+
 export namespace Results {
 
+
+  import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
   const VALUE_MAPPING: { [s: string]: number }  = {
     "Are smashing it": 3,
     "Are spot on": 2,
@@ -44,9 +48,10 @@ export namespace Results {
     groupedTeamData: string[][][],
     headers: string[],
     name: string
-  ) => {
+  ): ResultPayload[] => {
     const zippedData = groupedPersonalData.map((e, i) => [e, groupedTeamData[i]])
-    const payload: object[] = zippedData.map(([personalResults, teamResults]) => {
+
+    return zippedData.map(([personalResults, teamResults]) => {
       const personCore = coreValues(personalResults)
       const personNumeric = valueToNumeric(personCore)
       const personChartValues = dataToChartValues(personNumeric[0], headers)
@@ -58,6 +63,7 @@ export namespace Results {
       const teamChartValues = dataToChartValues(teamAverage, headers)
       const teamSustains = sustains(teamResults)
       const teamImprovements = improvements(teamResults)
+
       return {
         individual: {
           values: personChartValues
@@ -69,24 +75,23 @@ export namespace Results {
         sustain: [...personSustains, ...teamSustains],
         improve: [...personImprovements, ...teamImprovements]
       }
-    })
-      return payload
+    });
   }
 
-  const getHeaders = (sheets: any[]): string[] => {
+  const getHeaders = (sheets: Sheet[]): string[] => {
     const { 0: firstSheet } = sheets
     const { 0: sheetHeaders } = firstSheet.getRange(1, 1, 1, firstSheet.getMaxColumns()).getValues()
-    const cleanHeaders = sheetHeaders.filter(Boolean)
-      .slice(3, -2)
-      .map(header => header.substring(0, header.indexOf('[')))
-    return cleanHeaders
+
+    return sheetHeaders.filter(Boolean)
+        .slice(3, -2)
+        .map(header => header.substring(0, header.indexOf('[')))
   }
 
   export function createPayload(
     personalSpreadsheetId: string,
     teamSpreadsheetId: string,
     name: string
-  ) {
+  ): ResultPayload[] {
     const personalSpreadsheet = SpreadsheetApp.openById(personalSpreadsheetId)
     const teamSpreadsheet = SpreadsheetApp.openById(teamSpreadsheetId)
     const isNotDefaultSheet = sheet => sheet.getName() !== Constants.DEFAULT_SHEET
@@ -106,6 +111,7 @@ export namespace Results {
     }
     const groupedPersonalData = [0, ...rowsPerRoundPersonal].reduce(groupRounds(personalData), [])
     const groupedTeamData = [0, ...rowsPerRoundTeam].reduce(groupRounds(teamData), [])
+
     return formatData(groupedPersonalData, groupedTeamData, headers, name)
   }
 }
