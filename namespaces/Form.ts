@@ -189,6 +189,7 @@ export namespace Form {
     return form;
   };
 
+  /** @deprecated */
   export function createFeedbackForm(
     title: string,
     isPersonal: boolean,

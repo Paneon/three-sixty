@@ -227,6 +227,7 @@
     $('#team-modal').removeClass('is-active')
     $('#add-team-submit').removeClass('is-loading')
     renderTeamCards(teams)
+
     teams.forEach(({teamName, members}) => {
       $(`#${teamName}-modal`).removeClass('is-active')
       renderAddPersonModal(teamName)

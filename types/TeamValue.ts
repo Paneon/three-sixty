@@ -1,4 +1,4 @@
-export enum TeamValues {
+export enum TeamValue {
   DELIVERY = 'Delivery',
   MASTERY = 'Mastery',
   PROFESSIONALISM = 'Professionalism',
