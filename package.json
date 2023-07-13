@@ -4,21 +4,23 @@
   "description": "A simple three sixty feedback tool",
   "main": "App.ts",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "dev:watch": "clasp push --watch",
+    "lint": "eslint . --ext .ts --fix --ignore-path .gitignore"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ALRW/three-sixty.git"
+    "url": "git+https://github.com/Macavity/three-sixty.git"
   },
   "keywords": [
-    "three-sixty"
+    "three-sixty","360 degree feedback", "peer feedback", "bias"
   ],
   "author": "ALRW",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ALRW/three-sixty/issues"
+    "url": "https://github.com/Macavity/three-sixty/issues"
   },
-  "homepage": "https://github.com/ALRW/three-sixty#readme",
+  "homepage": "https://github.com/Macavity/three-sixty#readme",
   "jest": {
     "clearMocks": true,
     "coverageDirectory": "coverage",
@@ -43,17 +45,20 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.10.2",
+    "@babel/core": "7.18.6",
     "@babel/preset-env": "^7.10.2",
     "@babel/preset-typescript": "^7.10.1",
-    "@typescript-eslint/eslint-plugin": "^3.0.1",
-    "@typescript-eslint/parser": "^3.0.1",
     "babel-jest": "^26.0.1",
-    "eslint": "^7.1.0",
-    "jest": "^26.0.1"
+    "eslint": "^8.44.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "jest": "^26.0.1",
+    "prettier": "^3.0.0",
+    "@types/google-apps-script": "^1.0.14",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "typescript": "^5.1.6"
   },
   "dependencies": {
-    "@types/google-apps-script": "^1.0.14",
-    "typescript": "^5.1.6"
   }
 }

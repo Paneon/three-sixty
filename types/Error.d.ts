@@ -1,4 +1,3 @@
-
 interface ErrorMessage {
-    error: string,
+  error: string;
 }

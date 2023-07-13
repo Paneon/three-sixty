@@ -1,14 +1,13 @@
 export namespace Email {
-
-  export function sendEmail (email, subject, bodyData) {
+  export function sendEmail(email, subject, bodyData) {
     MailApp.sendEmail({
       to: email,
       subject: subject,
-      htmlBody: emailBody(bodyData)
-    })
+      htmlBody: emailBody(bodyData),
+    });
   }
 
-  const emailBody = ({firstName, personalFormUrl, peers}) => {
+  const emailBody = ({ firstName, personalFormUrl, peers }) => {
     return `
     <!doctype html>
 <html>
@@ -323,9 +322,20 @@ export namespace Email {
                           </tbody>
                         </table>
                         <p>A crucial part of this process is also to have a think about the other members of your team and give them the same thoughtful feedback that you would like to receive. So could you answer the following questionaires for your team members:</p>
-                        ${peers.map(([firstName, lastName, email, pfid, tfid, psid, tsid]) => {
-                          const formUrl = FormApp.openById(tfid).getPublishedUrl()
-                          const button = `
+                        ${peers
+                          .map(
+                            ([
+                              firstName,
+                              lastName,
+                              email,
+                              pfid,
+                              tfid,
+                              psid,
+                              tsid,
+                            ]) => {
+                              const formUrl =
+                                FormApp.openById(tfid).getPublishedUrl();
+                              const button = `
                         <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
                             <tr>
@@ -340,9 +350,11 @@ export namespace Email {
                               </td>
                             </tr>
                           </tbody>
-                        </table>`
-                          return button
-                        }).join('')}
+                        </table>`;
+                              return button;
+                            },
+                          )
+                          .join('')}
 
                         <p>If there are any issues with any of the above just let me know</p>
                       </td>
@@ -359,6 +371,6 @@ export namespace Email {
       </tr>
     </table>
   </body>
-</html>`
-  }
+</html>`;
+  };
 }

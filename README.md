@@ -13,12 +13,14 @@ It stands on the shoulders of Google App Suite and relies on it to do all of its
 
 ### Setup and Installation
 
-To setup and deply a new version of this application in your own G-Suite perform
+To set up and deploy a new version of this application in your own G-Suite perform
 the following:
 
 ```sh
 git clone git@github.com:Macavity/three-sixty.git && cd three-sixty
 ```
+
+Now you should create a copy of the `questions.csv.dist` under the name `questions.csv` and fill it with your own questions.
 
 ```sh
 npm install -g @google/clasp && npm install

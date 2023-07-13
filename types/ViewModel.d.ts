@@ -1,5 +1,4 @@
-
 interface ViewModel {
-    teamName: string;
-    members: Member[];
+  teamName: string;
+  members: Member[];
 }
