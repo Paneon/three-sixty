@@ -7,10 +7,13 @@ import Folder = GoogleAppsScript.Drive.Folder;
 import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
 import GoogleForm = GoogleAppsScript.Forms.Form;
 import HtmlOutput = GoogleAppsScript.HTML.HtmlOutput;
+import { GoogleDriveService } from './src/services/GoogleDriveService';
+import { TeamRepository } from './src/repositories/TeamRepository';
+import { FeedbackRepository } from './src/repositories/FeedbackRepository';
+import { PersonRepository } from './src/repositories/PersonRepository';
 
 // eslint-disable-next-line no-console
 console.info('VERSION: 1.1');
-
 export function doGet(): HtmlOutput {
   return HtmlService.createTemplateFromFile('index').evaluate();
 }
@@ -19,79 +22,19 @@ export function include(filename: string): string {
   return HtmlService.createHtmlOutputFromFile(filename).getContent();
 }
 
-function getOrCreateWorkingFolder(): Folder {
-  const folders = DriveApp.getFoldersByName(Constants.FOLDER);
-  return folders.hasNext()
-    ? folders.next()
-    : DriveApp.createFolder(Constants.FOLDER);
-}
-
-function addFileToWorkingFolder<T extends Spreadsheet | GoogleForm>(
-  folder,
-  file: T,
-): T {
-  const temp = DriveApp.getFileById(file.getId());
-  folder.addFile(temp);
-  DriveApp.getRootFolder().removeFile(temp);
-
-  return file;
-}
-
-function getOrCreateTeamSpreadsheet(folder: Folder): Spreadsheet {
-  const files = folder.getFilesByName(Constants.TEAM_SHEET);
-  if (files.hasNext()) {
-    return SpreadsheetApp.open(files.next());
-  }
-  const ss = SpreadsheetApp.create(Constants.TEAM_SHEET);
-  return addFileToWorkingFolder(folder, ss);
-}
-
-function matrixToViewModel(sheet): ViewModel {
-  return {
-    teamName: sheet.getName(),
-    members: sheet
-      .getDataRange()
-      .getValues()
-      .map((row: string[]) => ({
-        firstName: row[0],
-        lastName: row[1],
-        role: row[7],
-        email: row[2],
-      })),
-  };
-}
-
-function getPersonsIndex(sheet: Sheet, firstName: string, lastName: string) {
-  return (
-    sheet
-      .getDataRange()
-      .getValues()
-      .map((row) => row.slice(0, 2).join('').toLowerCase())
-      .indexOf(`${firstName}${lastName}`.toLowerCase()) + 1
-  );
-}
-
 export function getTeams(): ViewModel[] {
-  return getOrCreateTeamSpreadsheet(getOrCreateWorkingFolder())
-    .getSheets()
-    .filter((sheet) => sheet.getName() !== Constants.DEFAULT_SHEET)
-    .map((sheet) => matrixToViewModel(sheet));
+  return TeamRepository.getTeams();
 }
 
 export function addTeam(teamName: string): ViewModel[] {
-  const sanitisedName = teamName.replace(' ', '-');
-  const teamSpreadSheet = getOrCreateTeamSpreadsheet(
-    getOrCreateWorkingFolder(),
-  );
-  teamSpreadSheet.insertSheet(sanitisedName);
+  TeamRepository.addTeam(teamName);
+
   return getTeams();
 }
 
 export function removeTeam(teamName: string): ViewModel[] {
-  const teamSpreadSheet = getOrCreateTeamSpreadsheet(
-    getOrCreateWorkingFolder(),
-  );
-  teamSpreadSheet.deleteSheet(teamSpreadSheet.getSheetByName(teamName));
+  TeamRepository.removeTeam(teamName);
+
   return getTeams();
 }
 
@@ -104,7 +47,7 @@ export function addPerson({
 }): ViewModel[] {
   const lock = LockService.getScriptLock();
   lock.tryLock(15000);
-  const folder = getOrCreateWorkingFolder();
+  const folder = GoogleDriveService.getOrCreateWorkingFolder();
   const name = [firstName, lastName].filter(Boolean).join(' ');
 
   const forms = [
@@ -121,9 +64,13 @@ export function addPerson({
   );
   personalForm.setDestination(FormApp.DestinationType.SPREADSHEET, psid);
   teamForm.setDestination(FormApp.DestinationType.SPREADSHEET, tsid);
-  forms.forEach((file) => addFileToWorkingFolder(folder, file));
-  spreadsheets.forEach((file) => addFileToWorkingFolder(folder, file));
-  getOrCreateTeamSpreadsheet(folder)
+  forms.forEach((file) =>
+    GoogleDriveService.addFileToWorkingFolder(folder, file),
+  );
+  spreadsheets.forEach((file) =>
+    GoogleDriveService.addFileToWorkingFolder(folder, file),
+  );
+  TeamRepository.getOrCreateTeamSpreadsheet(folder)
     .getSheetByName(team)
     .appendRow([firstName, lastName, email, pfid, tfid, psid, tsid, role]);
   Utilities.sleep(15000);
@@ -137,8 +84,9 @@ function multiplyArray(arr, times) {
 }
 
 export function runFeedbackRound(teamName: string): string {
-  const folder = getOrCreateWorkingFolder();
-  const teamSheet = getOrCreateTeamSpreadsheet(folder).getSheetByName(teamName);
+  const folder = GoogleDriveService.getOrCreateWorkingFolder();
+  const teamSheet =
+    TeamRepository.getOrCreateTeamSpreadsheet(folder).getSheetByName(teamName);
   const team = teamSheet.getDataRange().getValues();
 
   // if there are more than chunkSize number of people limit the number of forms
@@ -197,33 +145,10 @@ export function runFeedbackRound(teamName: string): string {
 }
 
 export function removePerson({ firstName, lastName, teamName }): ViewModel[] {
-  const folder = getOrCreateWorkingFolder();
-  const teamSheet = getOrCreateTeamSpreadsheet(folder).getSheetByName(teamName);
-  const rowIndex = getPersonsIndex(teamSheet, firstName, lastName);
-  const { 0: docIds } = teamSheet.getRange(rowIndex, 4, 1, 4).getValues();
-  docIds.forEach((id) => folder.removeFile(DriveApp.getFileById(id)));
-  teamSheet.deleteRow(rowIndex);
+  PersonRepository.removePerson({ firstName, lastName, teamName });
   return getTeams();
 }
 
-const errorPayload = (errorMessage: string): ErrorMessage => ({
-  error: errorMessage,
-});
-
 export function getFeedbackData(name: string) {
-  try {
-    const { 0: firstName, 1: lastName } = name.split(' ');
-    const folder = getOrCreateWorkingFolder();
-    const { 0: teamSheet } = getOrCreateTeamSpreadsheet(folder)
-      .getSheets()
-      .filter((sheet) => getPersonsIndex(sheet, firstName, lastName) > 0);
-    const { 5: psid, 6: tsid } = teamSheet.getDataRange().getValues()[
-      getPersonsIndex(teamSheet, firstName, lastName) - 1
-    ];
-    return Results.createPayload(psid, tsid, name);
-  } catch (error) {
-    return errorPayload(
-      `Could not find any data for ${name}. Ensure you have entered the name in the format: Firstname Lastname`,
-    );
-  }
+  FeedbackRepository.getFeedbackData(name);
 }
