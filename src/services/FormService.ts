@@ -1,7 +1,7 @@
-import { Constants } from './Constants';
+import { Constants } from '../../namespaces/Constants';
 
-export namespace Form {
-  const createMultipleChoiceGrid = (form, question, helpText) =>
+export class FormService {
+  private createMultipleChoiceGrid(form, question, helpText) {
     form
       .addGridItem()
       .setTitle(question)
@@ -9,16 +9,17 @@ export namespace Form {
       .setRows(['You...'])
       .setColumns(['Have room to do more', 'Are spot on', 'Are smashing it'])
       .setRequired(true);
+  }
 
-  const createFormHead = (form, title) => {
+  private createFormHead(form, title) {
     form.setTitle(title);
     form.addSectionHeaderItem().setTitle('First a little bit about you');
     form.addTextItem().setTitle("What's your first name?").setRequired(true);
     form.addTextItem().setTitle("What's your surname?").setRequired(true);
     return form;
-  };
+  }
 
-  const createFormTail = (form, isPersonal) => {
+  private createFormTail(form, isPersonal) {
     const youThey = isPersonal ? 'you' : 'they';
     form.addPageBreakItem().setTitle('General Feedback');
     form
@@ -30,9 +31,9 @@ export namespace Form {
       .setTitle(`What things could ${youThey} focus on improving`)
       .setRequired(true);
     return form;
-  };
+  }
 
-  const createEngineerForm = (title: string, isPersonal: boolean) => {
+  private createEngineerForm(title: string, isPersonal: boolean) {
     const theWhatQuestions = [
       [
         'Execution',
@@ -94,16 +95,20 @@ export namespace Form {
       ],
     ];
     const form = FormApp.create(title).setProgressBar(true);
-    createFormHead(form, title);
+    this.createFormHead(form, title);
     form.addPageBreakItem().setTitle('The What');
-    theWhatQuestions.forEach(([k, v]) => createMultipleChoiceGrid(form, k, v));
+    theWhatQuestions.forEach(([k, v]) =>
+      this.createMultipleChoiceGrid(form, k, v),
+    );
     form.addPageBreakItem().setTitle('The How (Our Values)');
-    theHowQuestions.forEach(([k, v]) => createMultipleChoiceGrid(form, k, v));
-    createFormTail(form, isPersonal);
+    theHowQuestions.forEach(([k, v]) =>
+      this.createMultipleChoiceGrid(form, k, v),
+    );
+    this.createFormTail(form, isPersonal);
     return form;
-  };
+  }
 
-  const createProductForm = (title: string, isPersonal: boolean) => {
+  private createProductForm(title: string, isPersonal: boolean) {
     const questions = [
       [
         'Problem solving',
@@ -143,14 +148,14 @@ export namespace Form {
       ],
     ];
     const form = FormApp.create(title).setProgressBar(true);
-    createFormHead(form, title);
+    this.createFormHead(form, title);
     form.addPageBreakItem().setTitle('Their Role');
-    questions.forEach(([k, v]) => createMultipleChoiceGrid(form, k, v));
-    createFormTail(form, isPersonal);
+    questions.forEach(([k, v]) => this.createMultipleChoiceGrid(form, k, v));
+    this.createFormTail(form, isPersonal);
     return form;
-  };
+  }
 
-  const createDeliveryForm = (title: string, isPersonal: boolean) => {
+  private createDeliveryForm(title: string, isPersonal: boolean) {
     const questions = [
       [
         'Environment',
@@ -182,24 +187,20 @@ export namespace Form {
       ],
     ];
     const form = FormApp.create(title).setProgressBar(true);
-    createFormHead(form, title);
+    this.createFormHead(form, title);
     form.addPageBreakItem().setTitle('Their Role');
-    questions.forEach(([k, v]) => createMultipleChoiceGrid(form, k, v));
-    createFormTail(form, isPersonal);
+    questions.forEach(([k, v]) => this.createMultipleChoiceGrid(form, k, v));
+    this.createFormTail(form, isPersonal);
     return form;
-  };
+  }
 
-  export function createFeedbackForm(
-    title: string,
-    isPersonal: boolean,
-    role: string,
-  ) {
+  public createFeedbackForm(title: string, isPersonal: boolean, role: string) {
     if (role === Constants.PRODUCT_MANAGER) {
-      return createProductForm(title, isPersonal);
+      return this.createProductForm(title, isPersonal);
     } else if (role === Constants.SCRUM_MASTER) {
-      return createDeliveryForm(title, isPersonal);
+      return this.createDeliveryForm(title, isPersonal);
     } else {
-      return createEngineerForm(title, isPersonal);
+      return this.createEngineerForm(title, isPersonal);
     }
   }
 }
