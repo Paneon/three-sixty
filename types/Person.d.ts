@@ -1,4 +1,4 @@
-interface Member {
+interface Person {
   firstName: string;
   lastName: string;
   role: string;

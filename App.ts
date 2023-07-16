@@ -1,16 +1,11 @@
 import { Constants } from './namespaces/Constants';
-import { Form } from './namespaces/Form';
 import { Email } from './namespaces/Email';
-import { Results } from './namespaces/Results';
-import Spreadsheet = GoogleAppsScript.Spreadsheet.Spreadsheet;
-import Folder = GoogleAppsScript.Drive.Folder;
-import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
-import GoogleForm = GoogleAppsScript.Forms.Form;
 import HtmlOutput = GoogleAppsScript.HTML.HtmlOutput;
 import { GoogleDriveService } from './src/services/GoogleDriveService';
 import { TeamRepository } from './src/repositories/TeamRepository';
 import { FeedbackRepository } from './src/repositories/FeedbackRepository';
 import { PersonRepository } from './src/repositories/PersonRepository';
+import { FormService } from './src/services/FormService';
 
 // eslint-disable-next-line no-console
 console.info('VERSION: 1.1');
@@ -49,10 +44,11 @@ export function addPerson({
   lock.tryLock(15000);
   const folder = GoogleDriveService.getOrCreateWorkingFolder();
   const name = [firstName, lastName].filter(Boolean).join(' ');
+  const formService = new FormService();
 
   const forms = [
-    Form.createFeedbackForm(`${name}'s Self-Reflection`, true, role),
-    Form.createFeedbackForm(`${name}'s Team Feedback`, false, role),
+    formService.createFeedbackForm(`${name}'s Self-Reflection`, true, role),
+    formService.createFeedbackForm(`${name}'s Team Feedback`, false, role),
   ];
   const spreadsheets = [
     SpreadsheetApp.create(`${name}'s Self-Reflection Results`),

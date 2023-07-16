@@ -1,6 +1,7 @@
 import { Constants } from '../../namespaces/Constants';
 
 export class FormService {
+  static VERSION = '1.1';
   private createMultipleChoiceGrid(form, question, helpText) {
     form
       .addGridItem()
@@ -13,9 +14,7 @@ export class FormService {
 
   private createFormHead(form, title) {
     form.setTitle(title);
-    form.addSectionHeaderItem().setTitle('First a little bit about you');
-    form.addTextItem().setTitle("What's your first name?").setRequired(true);
-    form.addTextItem().setTitle("What's your surname?").setRequired(true);
+    form.setDescription('Version: ' + FormService.VERSION);
     return form;
   }
 
