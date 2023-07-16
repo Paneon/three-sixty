@@ -6,6 +6,8 @@ import { TeamRepository } from './src/repositories/TeamRepository';
 import { FeedbackRepository } from './src/repositories/FeedbackRepository';
 import { PersonRepository } from './src/repositories/PersonRepository';
 import { FormService } from './src/services/FormService';
+import { PersonService } from './src/services/PersonService';
+import { PersonFactory } from './src/factories/PersonFactory';
 
 // eslint-disable-next-line no-console
 console.info('VERSION: 1.1');
@@ -40,37 +42,9 @@ export function addPerson({
   role,
   team,
 }): ViewModel[] {
-  const lock = LockService.getScriptLock();
-  lock.tryLock(15000);
-  const folder = GoogleDriveService.getOrCreateWorkingFolder();
-  const name = [firstName, lastName].filter(Boolean).join(' ');
-  const formService = new FormService();
-
-  const forms = [
-    formService.createFeedbackForm(`${name}'s Self-Reflection`, true, role),
-    formService.createFeedbackForm(`${name}'s Team Feedback`, false, role),
-  ];
-  const spreadsheets = [
-    SpreadsheetApp.create(`${name}'s Self-Reflection Results`),
-    SpreadsheetApp.create(`${name}'s Team Feedback Results`),
-  ];
-  const { 0: personalForm, 1: teamForm } = forms;
-  const [pfid, tfid, psid, tsid] = [...forms, ...spreadsheets].map((f) =>
-    f.getId(),
-  );
-  personalForm.setDestination(FormApp.DestinationType.SPREADSHEET, psid);
-  teamForm.setDestination(FormApp.DestinationType.SPREADSHEET, tsid);
-  forms.forEach((file) =>
-    GoogleDriveService.addFileToWorkingFolder(folder, file),
-  );
-  spreadsheets.forEach((file) =>
-    GoogleDriveService.addFileToWorkingFolder(folder, file),
-  );
-  TeamRepository.getOrCreateTeamSpreadsheet(folder)
-    .getSheetByName(team)
-    .appendRow([firstName, lastName, email, pfid, tfid, psid, tsid, role]);
-  Utilities.sleep(15000);
-  lock.releaseLock();
+  const personService = new PersonService();
+  const person = PersonFactory.create(firstName, lastName, email, role);
+  personService.addPerson(person, team);
 
   return getTeams();
 }

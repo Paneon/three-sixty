@@ -144,7 +144,12 @@
         email: $(`#${teamName}-add-email`).val(),
         team: teamName
       }
+      try {
       google.script.run.withSuccessHandler(renderTeams).addPerson(data)
+      } catch (e) {
+        console.error(e);
+        $(`#${teamName}-progress-div`).innerText("There was an error during adding the new team member.");
+      }
       const updateProgress = () => {
         const div = $(`#${teamName}-progress-div`)
         const prog = $(`#${teamName}-progress`)

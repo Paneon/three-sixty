@@ -1,10 +1,21 @@
+import { PersonRowColum } from './RowFactory';
+
 export class PersonFactory {
   static createFromRow(row: string[]): Person {
-    return {
-      firstName: row[0],
-      lastName: row[1],
-      role: row[7],
-      email: row[2],
-    };
+    return new Person(
+      row[PersonRowColum.FIRST_NAME],
+      row[PersonRowColum.LAST_NAME],
+      row[PersonRowColum.E_MAIL],
+      row[PersonRowColum.ROLE],
+    );
+  }
+
+  static create(
+    firstName: string,
+    lastName: string,
+    email: string,
+    role: string,
+  ) {
+    return new Person(firstName, lastName, email, role);
   }
 }
