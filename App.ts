@@ -8,6 +8,7 @@ import { PersonRepository } from './src/repositories/PersonRepository';
 import { FormService } from './src/services/FormService';
 import { PersonService } from './src/services/PersonService';
 import { PersonFactory } from './src/factories/PersonFactory';
+import { FeedbackRoundService } from './src/services/FeedbackRoundService';
 
 // eslint-disable-next-line no-console
 console.info('VERSION: 1.1');
@@ -49,68 +50,13 @@ export function addPerson({
   return getTeams();
 }
 
-function multiplyArray(arr, times) {
-  return times ? arr.concat(multiplyArray(arr, times - 1)) : [];
-}
-
 export function runFeedbackRound(teamName: string): string {
-  const folder = GoogleDriveService.getOrCreateWorkingFolder();
-  const teamSheet =
-    TeamRepository.getOrCreateTeamSpreadsheet(folder).getSheetByName(teamName);
-  const team = teamSheet.getDataRange().getValues();
+  const feedbackRoundService = new FeedbackRoundService();
+  const teamRepository = new TeamRepository();
+  const teamSheet = teamRepository.getTeamSheet(teamName);
 
-  // if there are more than chunkSize number of people limit the number of forms
-  // each person receives
-  const chunkSize = team.length > 4 ? 4 : team.length - 1;
-  const allFeedbackRequests = multiplyArray(team, chunkSize);
-  const rotatedPeers = [
-    allFeedbackRequests[allFeedbackRequests.length - 1],
-    ...allFeedbackRequests.slice(1, allFeedbackRequests.length - 1),
-    allFeedbackRequests[0],
-  ];
-  const teamWithPeers = team.map((person, index) => {
-    const startIndex = index * chunkSize;
-    const endIndex = startIndex + chunkSize;
-    return [...person, rotatedPeers.slice(startIndex, endIndex)];
-  });
+  feedbackRoundService.run(teamSheet);
 
-  teamWithPeers.forEach(
-    (
-      [firstName, lastName, email, pfid, tfid, psid, tsid, role, peers],
-      i,
-      original,
-    ) => {
-      const personalSpreadsheet = SpreadsheetApp.openById(psid);
-      const personalResultsSheet = personalSpreadsheet.getSheetByName(
-        Constants.DEFAULT_RESULTS_SHEET,
-      );
-      const newSheetRequired = personalResultsSheet.getLastRow() > 1;
-      const numberOfRounds = personalSpreadsheet
-        .getSheets()
-        .filter((sheet) => sheet.getName() !== Constants.DEFAULT_SHEET).length;
-      if (newSheetRequired) {
-        personalSpreadsheet.insertSheet(
-          `Form Responses ${numberOfRounds + 1}`,
-          { template: personalResultsSheet },
-        );
-      }
-      const teamSpreadSheet = SpreadsheetApp.openById(tsid);
-      const teamResultsSheet = teamSpreadSheet.getSheetByName(
-        Constants.DEFAULT_RESULTS_SHEET,
-      );
-      if (newSheetRequired) {
-        teamSpreadSheet.insertSheet(`Form Responses ${numberOfRounds + 1}`, {
-          template: teamResultsSheet,
-        });
-      }
-      const personalFormUrl = FormApp.openById(pfid).getPublishedUrl();
-      Email.sendEmail(email, 'New 360 Feedback Round', {
-        firstName,
-        personalFormUrl,
-        peers,
-      });
-    },
-  );
   return teamName;
 }
 
