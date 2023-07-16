@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest",
     "dev:watch": "clasp push --watch",
+    "gas:login": "clasp login",
     "lint": "eslint . --ext .ts --fix --ignore-path .gitignore"
   },
   "repository": {

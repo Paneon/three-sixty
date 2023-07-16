@@ -1,39 +1,13 @@
-import { Constants } from './Constants';
+import { Questions } from '../../questions';
+import { Question } from '../../types/Question';
+import { Connotation } from '../../types/Connotation';
+import { TeamValue } from '../../types/TeamValue';
 
-export namespace Form {
-  const createMultipleChoiceGrid = (form, question, helpText) =>
-    form
-      .addGridItem()
-      .setTitle(question)
-      .setHelpText(helpText)
-      .setRows(['You...'])
-      .setColumns(['Have room to do more', 'Are spot on', 'Are smashing it'])
-      .setRequired(true);
+export class QuestionRepository {
+  constructor() {}
 
-  const createFormHead = (form, title) => {
-    form.setTitle(title);
-    form.addSectionHeaderItem().setTitle('First a little bit about you');
-    form.addTextItem().setTitle("What's your first name?").setRequired(true);
-    form.addTextItem().setTitle("What's your surname?").setRequired(true);
-    return form;
-  };
-
-  const createFormTail = (form, isPersonal) => {
-    const youThey = isPersonal ? 'you' : 'they';
-    form.addPageBreakItem().setTitle('General Feedback');
-    form
-      .addTextItem()
-      .setTitle(`Generally, what things should ${youThey} keep doing`)
-      .setRequired(true);
-    form
-      .addTextItem()
-      .setTitle(`What things could ${youThey} focus on improving`)
-      .setRequired(true);
-    return form;
-  };
-
-  const createEngineerForm = (title: string, isPersonal: boolean) => {
-    const theWhatQuestions = [
+  getEngineerQuestions() {
+    return [
       [
         'Execution',
         'Delivers against commitments with a high degree of accuracy and quality',
@@ -50,8 +24,6 @@ export namespace Form {
         'Design & Architecture',
         'Architects using accepted patterns, allowing for iterative, autonomous development and future scaling. Anticipates future use, making design decisions that minimise the cost of future changes.',
       ],
-    ];
-    const theHowQuestions = [
       [
         'Problem Solving',
         'Solve tough problems with insightful, practical solutions, making wise deicisions despite ambiguity and thinks strategically',
@@ -93,18 +65,9 @@ export namespace Form {
         'shows conviction over time, developing a sense of purpose for what they do',
       ],
     ];
-    const form = FormApp.create(title).setProgressBar(true);
-    createFormHead(form, title);
-    form.addPageBreakItem().setTitle('The What');
-    theWhatQuestions.forEach(([k, v]) => createMultipleChoiceGrid(form, k, v));
-    form.addPageBreakItem().setTitle('The How (Our Values)');
-    theHowQuestions.forEach(([k, v]) => createMultipleChoiceGrid(form, k, v));
-    createFormTail(form, isPersonal);
-    return form;
-  };
-
-  const createProductForm = (title: string, isPersonal: boolean) => {
-    const questions = [
+  }
+  getProductQuestions() {
+    return [
       [
         'Problem solving',
         'They explain and simplify the problem space. They collaborate with you to find solutions and how it can be broken down.',
@@ -142,16 +105,10 @@ export namespace Form {
         'They are able to adapt to changing situations and uncertainty, covering where there are gaps and ensuring the team and the stakeholders keep moving as a whole.',
       ],
     ];
-    const form = FormApp.create(title).setProgressBar(true);
-    createFormHead(form, title);
-    form.addPageBreakItem().setTitle('Their Role');
-    questions.forEach(([k, v]) => createMultipleChoiceGrid(form, k, v));
-    createFormTail(form, isPersonal);
-    return form;
-  };
+  }
 
-  const createDeliveryForm = (title: string, isPersonal: boolean) => {
-    const questions = [
+  getDeliveryQuestions() {
+    return [
       [
         'Environment',
         'Helps to create an environment in which team members feel more confident to personally commit to achieving the goals of the team.',
@@ -181,25 +138,27 @@ export namespace Form {
         'They are able to adapt to changing situations and uncertainty, covering where there are gaps and ensuring the team keeps moving as a whole.',
       ],
     ];
-    const form = FormApp.create(title).setProgressBar(true);
-    createFormHead(form, title);
-    form.addPageBreakItem().setTitle('Their Role');
-    questions.forEach(([k, v]) => createMultipleChoiceGrid(form, k, v));
-    createFormTail(form, isPersonal);
-    return form;
-  };
+  }
 
-  export function createFeedbackForm(
-    title: string,
-    isPersonal: boolean,
-    role: string,
-  ) {
-    if (role === Constants.PRODUCT_MANAGER) {
-      return createProductForm(title, isPersonal);
-    } else if (role === Constants.SCRUM_MASTER) {
-      return createDeliveryForm(title, isPersonal);
-    } else {
-      return createEngineerForm(title, isPersonal);
+  static findAll() {
+    const questions = [
+      ...Questions.map((item) => ({
+        title: item[0].toString(),
+        value: TeamValue[item[1]],
+        connotation: Connotation[item[2]],
+      })),
+    ];
+
+    return QuestionRepository.shuffle(questions);
+  }
+
+  static shuffle(array: Question[]) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
     }
+    return array;
   }
 }
