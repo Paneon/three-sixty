@@ -16,16 +16,8 @@ export class PersonService {
     const folder = GoogleDriveService.getOrCreateWorkingFolder();
 
     const forms = [
-      this.formService.createFeedbackForm(
-        `${name}'s Self-Reflection`,
-        true,
-        person.role,
-      ),
-      this.formService.createFeedbackForm(
-        `${name}'s Team Feedback`,
-        false,
-        person.role,
-      ),
+      this.formService.createSelfReflectionForm(),
+      this.formService.createFeedbackForm(name),
     ];
     const spreadsheets = [
       SpreadsheetApp.create(`${name}'s Self-Reflection Results`),

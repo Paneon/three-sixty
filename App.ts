@@ -43,8 +43,8 @@ export function addPerson({
   role,
   team,
 }): ViewModel[] {
-  const personService = new PersonService();
   const person = PersonFactory.create(firstName, lastName, email, role);
+  const personService = new PersonService(person.name);
   personService.addPerson(person, team);
 
   return getTeams();
