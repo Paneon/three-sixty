@@ -1,7 +1,19 @@
 {
+  "ts-node": {
+    "transpileOnly": true,
     "compilerOptions": {
-        "allowJs": true,
-        "checkJs": true,
-        "types": ["google-apps-script"]
-      }
+      "module": "commonjs",
+      "esModuleInterop": true
+    },
+    "esm": true
+  },
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "types": [
+      "google-apps-script",
+      "node",
+      "jest"
+    ]
+  }
 }

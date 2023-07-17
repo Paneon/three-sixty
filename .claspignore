@@ -4,3 +4,4 @@ package.json
 **/spec/**
 **/.idea/**
 convert_csv.ts
+**/*.spec.*

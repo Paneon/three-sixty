@@ -1,17 +1,14 @@
-import { Constants } from './namespaces/Constants';
-import { Email } from './namespaces/Email';
-import HtmlOutput = GoogleAppsScript.HTML.HtmlOutput;
-import { GoogleDriveService } from './src/services/GoogleDriveService';
 import { TeamRepository } from './src/repositories/TeamRepository';
 import { FeedbackRepository } from './src/repositories/FeedbackRepository';
 import { PersonRepository } from './src/repositories/PersonRepository';
-import { FormService } from './src/services/FormService';
 import { PersonService } from './src/services/PersonService';
 import { PersonFactory } from './src/factories/PersonFactory';
 import { FeedbackRoundService } from './src/services/FeedbackRoundService';
+import HtmlOutput = GoogleAppsScript.HTML.HtmlOutput;
 
 // eslint-disable-next-line no-console
-console.info('VERSION: 1.1');
+Logger.log('VERSION: 1.1');
+
 export function doGet(): HtmlOutput {
   return HtmlService.createTemplateFromFile('index').evaluate();
 }
@@ -43,11 +40,19 @@ export function addPerson({
   role,
   team,
 }): ViewModel[] {
-  const personService = new PersonService();
   const person = PersonFactory.create(firstName, lastName, email, role);
+  const personService = new PersonService(person.name);
   personService.addPerson(person, team);
 
   return getTeams();
+}
+
+export function updatePerson(
+  teamName: string,
+  firstName: string,
+  lastName: string,
+) {
+  const person = PersonRepository.getPerson(teamName, firstName, lastName);
 }
 
 export function runFeedbackRound(teamName: string): string {

@@ -1,8 +1,9 @@
-/* eslint-disable no-console */
-import * as path from 'path';
-import * as fs from 'fs';
-import { parse } from 'csv-parse';
-import { Question } from './types/Question';
+#!/usr/bin/env ts-node
+/* eslint-disable no-console,@typescript-eslint/no-var-requires */
+const path = require('path');
+const fs = require('fs');
+const { parse } = require('csv-parse');
+const { Question } = require('./types/Question');
 
 const csvFilePath = path.resolve(__dirname, './questions.csv');
 
@@ -23,7 +24,7 @@ parse(
     columns: headers,
     fromLine: 2,
   },
-  (error, result: Question[]) => {
+  (error, result) => {
     if (error) {
       console.error(error);
       throw error;
