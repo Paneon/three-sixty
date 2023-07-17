@@ -7,11 +7,18 @@ import {
   getTeams,
 } from '../App';
 
+interface ChainableFunction {
+  withFailureHandler(
+    callback: CallableFunction,
+  ): ChainableFunction | ScriptFunctions;
+  withSuccessHandler(
+    callback: CallableFunction,
+  ): ChainableFunction | ScriptFunctions;
+}
+
 export interface Google {
   script: {
-    run: {
-      withSuccessHandler(callback: CallableFunction): ScriptFunctions;
-    };
+    run: ChainableFunction;
   };
 }
 

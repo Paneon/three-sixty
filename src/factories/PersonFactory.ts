@@ -7,6 +7,10 @@ export class PersonFactory {
       row[PersonRowColum.LAST_NAME],
       row[PersonRowColum.E_MAIL],
       row[PersonRowColum.ROLE],
+      row[PersonRowColum.PERSONAL_FORM],
+      row[PersonRowColum.TEAM_FORM],
+      row[PersonRowColum.PERSONAL_SHEET],
+      row[PersonRowColum.TEAM_SHEET],
     );
   }
 

@@ -1,6 +1,6 @@
-import { Constants } from '../../namespaces/Constants';
 import { QuestionRepository } from '../repositories/QuestionRepository';
 import { Answer } from '../../types/Answer';
+import { Constants } from '../../namespaces/Constants';
 
 export class FormService {
   static VERSION = '1.1';
@@ -101,11 +101,28 @@ export class FormService {
     isPersonal: boolean,
   ) {
     const questions = this.questionRepository.findAll();
-    let form = FormApp.create(title).setProgressBar(true);
+
+    let form;
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (Constants.FORM_TEMPLATE && Constants.FORM_TEMPLATE !== '') {
+      const copy = DriveApp.getFileById(Constants.FORM_TEMPLATE).makeCopy();
+      form = FormApp.openById(copy.getId());
+      form.setName(title);
+    } else {
+      form = FormApp.create(title).setProgressBar(true);
+    }
+
+    form.setTitle(title);
+    form.setProgressBar(true);
     form.setDescription(description);
+    form.setCollectEmail(true);
+    form.setLimitOneResponsePerUser(true);
+    form.setShowLinkToRespondAgain(false);
     this.createFormHead(form, title);
 
-    form.addPageBreakItem().setTitle('Statements');
+    form.addPageBreakItem();
     const gridItem = form.addGridItem();
 
     gridItem

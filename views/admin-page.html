@@ -79,6 +79,24 @@
     })
   }
 
+  function handleError(error){
+    const html = `
+    <div id="notification-error" class="notification is-error">
+      <button id="notification-delete" class="delete"></button>
+      <h1 class="title">Error</h1>
+      <h2 class="subtitle">${error.message}</h2>
+    </div>`
+    $(`.modal`).removeClass('is-active')
+    $(`.is-loading`).removeClass('is-loading')
+    $('#team-details').prepend(html)
+    $('#notification-delete').click(e => {
+      e.preventDefault()
+      $('#notification-error').remove()
+    });
+
+    Logger.log(error);
+  }
+
   function renderAddPersonModal(teamName){
     const html = `
   <div id="${teamName}-modal" class="modal">
@@ -144,12 +162,8 @@
         email: $(`#${teamName}-add-email`).val(),
         team: teamName
       }
-      try {
-      google.script.run.withSuccessHandler(renderTeams).addPerson(data)
-      } catch (e) {
-        console.error(e);
-        $(`#${teamName}-progress-div`).innerText("There was an error during adding the new team member.");
-      }
+      google.script.run.withFailureHandler(handleError).withSuccessHandler(renderTeams).addPerson(data)
+
       const updateProgress = () => {
         const div = $(`#${teamName}-progress-div`)
         const prog = $(`#${teamName}-progress`)
