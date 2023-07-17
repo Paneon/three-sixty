@@ -1,8 +1,5 @@
-//import { describe, it, expect, jest } from '@jest/globals';
-
 import { QuestionRepository } from './QuestionRepository';
-import { QuestionDataRow, QuestionFactory } from '../factories/QuestionFactory';
-import { Questions } from '../../questions';
+import { QuestionDataRow } from '../factories/QuestionFactory';
 
 describe('QuestionRepository', () => {
   const questions = [

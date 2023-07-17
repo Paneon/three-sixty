@@ -1,11 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Questions } from '../../questions';
 import { Question } from '../../types/Question';
 import { QuestionDataRow, QuestionFactory } from '../factories/QuestionFactory';
-import path from 'path';
-// @ts-ignore
-import fs from 'fs';
-import { parse } from 'csv-parse';
 
 const RawQuestionArray = [
   ['incorporates constructive feedback', 'Seek to improve', 1],
@@ -102,35 +97,6 @@ const RawQuestionArray = [
 
 export class QuestionRepository {
   constructor() {}
-
-  async parseCSV() {
-    const csvFilePath = '../../questions.csv';
-    const headers = ['title', 'value', 'connotation'];
-
-    const fileContent = fs.readFileSync(csvFilePath, {
-      encoding: 'utf-8',
-    });
-
-    const processFile = async (): Promise<QuestionDataRow[]> => {
-      const records: QuestionDataRow[] = [];
-      const parser = fs.createReadStream(`${__dirname}/fs_read.csv`).pipe(
-        parse({
-          delimiter: ',',
-          columns: headers,
-          fromLine: 2,
-        }),
-      );
-      for await (const record of parser) {
-        records.push(record);
-      }
-      return records;
-    };
-
-    const records = await processFile();
-    console.info(records);
-
-    return records;
-  }
 
   getEngineerQuestions() {
     return [
@@ -268,12 +234,14 @@ export class QuestionRepository {
   }
 
   findAll(): Question[] {
-    const questions = QuestionFactory.createFromRawDataRows(RawQuestionArray);
+    const dataArray = this.getRawDataArray();
+    const questions = QuestionFactory.createFromRawDataRows(dataArray);
+
     return QuestionRepository.shuffle(questions);
   }
 
   getRawDataArray(): QuestionDataRow[] {
-    return Questions as QuestionDataRow[];
+    return RawQuestionArray;
   }
 
   static shuffle(array: Question[]) {
