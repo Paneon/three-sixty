@@ -108,8 +108,8 @@ export class FormService {
     // @ts-ignore
     if (Constants.FORM_TEMPLATE && Constants.FORM_TEMPLATE !== '') {
       const copy = DriveApp.getFileById(Constants.FORM_TEMPLATE).makeCopy();
+      copy.setName(title);
       form = FormApp.openById(copy.getId());
-      form.setName(title);
     } else {
       form = FormApp.create(title).setProgressBar(true);
     }
