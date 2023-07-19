@@ -1,4 +1,4 @@
-import { Constants } from '../../namespaces/Constants';
+import { Constants } from '../../../namespaces/Constants';
 import Folder = GoogleAppsScript.Drive.Folder;
 import Spreadsheet = GoogleAppsScript.Spreadsheet.Spreadsheet;
 import { GoogleDriveService } from '../services/GoogleDriveService';

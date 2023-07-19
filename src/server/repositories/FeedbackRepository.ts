@@ -1,6 +1,6 @@
 import { GoogleDriveService } from '../services/GoogleDriveService';
 import { TeamRepository } from './TeamRepository';
-import { Results } from '../../namespaces/Results';
+import { Results } from '../../../namespaces/Results';
 import { ErrorPayloadFactory } from '../factories/ErrorPayloadFactory';
 import { PersonRepository } from './PersonRepository';
 
@@ -13,7 +13,7 @@ export class FeedbackRepository {
         .getSheets()
         .filter(
           (sheet) =>
-            PersonRepository.getPersonsIndex(sheet, firstName, lastName) > 0,
+            PersonRepository.getPersonsIndex(sheet, firstName, lastName) > 0
         );
       const { 5: psid, 6: tsid } = teamSheet.getDataRange().getValues()[
         PersonRepository.getPersonsIndex(teamSheet, firstName, lastName) - 1
@@ -22,7 +22,7 @@ export class FeedbackRepository {
     } catch (error) {
       console.error(error);
       return ErrorPayloadFactory.create(
-        `Could not find any data for ${name}. Ensure you have entered the name in the format: Firstname Lastname`,
+        `Could not find any data for ${name}. Ensure you have entered the name in the format: Firstname Lastname`
       );
     }
   }

@@ -1,10 +1,20 @@
-import { TeamRepository } from './src/repositories/TeamRepository';
-import { FeedbackRepository } from './src/repositories/FeedbackRepository';
-import { PersonRepository } from './src/repositories/PersonRepository';
-import { PersonService } from './src/services/PersonService';
-import { PersonFactory } from './src/factories/PersonFactory';
-import { FeedbackRoundService } from './src/services/FeedbackRoundService';
+import {
+  onOpen,
+  openDialog,
+  openDialogBootstrap,
+  openDialogMUI,
+  openDialogTailwindCSS,
+  openAboutSidebar,
+} from './ui';
+
+import { getSheetsData, addSheet, deleteSheet, setActiveSheet } from './sheets';
 import HtmlOutput = GoogleAppsScript.HTML.HtmlOutput;
+import { TeamRepository } from './repositories/TeamRepository';
+import { PersonFactory } from './factories/PersonFactory';
+import { PersonService } from './services/PersonService';
+import { PersonRepository } from './repositories/PersonRepository';
+import { FeedbackRoundService } from './services/FeedbackRoundService';
+import { FeedbackRepository } from './repositories/FeedbackRepository';
 
 // eslint-disable-next-line no-console
 Logger.log('VERSION: 1.1');
@@ -50,7 +60,7 @@ export function addPerson({
 export function updatePerson(
   teamName: string,
   firstName: string,
-  lastName: string,
+  lastName: string
 ) {
   const person = PersonRepository.getPerson(teamName, firstName, lastName);
 }
@@ -73,3 +83,16 @@ export function removePerson({ firstName, lastName, teamName }): ViewModel[] {
 export function getFeedbackData(name: string) {
   FeedbackRepository.getFeedbackData(name);
 }
+
+export {
+  onOpen,
+  openDialog,
+  openDialogBootstrap,
+  openDialogMUI,
+  openDialogTailwindCSS,
+  openAboutSidebar,
+  getSheetsData,
+  addSheet,
+  deleteSheet,
+  setActiveSheet,
+};
