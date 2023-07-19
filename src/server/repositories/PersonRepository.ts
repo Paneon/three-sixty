@@ -1,7 +1,6 @@
 import { GoogleDriveService } from '../services/GoogleDriveService';
 import { TeamRepository } from './TeamRepository';
 import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
-import { getTeams } from '../../App';
 import { PersonFactory } from '../factories/PersonFactory';
 
 export class PersonRepository {
@@ -9,12 +8,12 @@ export class PersonRepository {
     const folder = GoogleDriveService.getOrCreateWorkingFolder();
     const teamSheet =
       TeamRepository.getOrCreateTeamSpreadsheet(folder).getSheetByName(
-        teamName,
+        teamName
       );
     const rowIndex = PersonRepository.getPersonsIndex(
       teamSheet,
       firstName,
-      lastName,
+      lastName
     );
     const { 0: docIds } = teamSheet.getRange(rowIndex, 4, 1, 4).getValues();
     docIds.forEach((id) => folder.removeFile(DriveApp.getFileById(id)));

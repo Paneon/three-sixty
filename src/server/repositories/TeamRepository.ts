@@ -3,7 +3,6 @@ import Folder = GoogleAppsScript.Drive.Folder;
 import Spreadsheet = GoogleAppsScript.Spreadsheet.Spreadsheet;
 import { GoogleDriveService } from '../services/GoogleDriveService';
 import { ViewModelFactory } from '../factories/ViewModelFactory';
-import { getTeams } from '../../App';
 import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
 
 export class TeamRepository {
@@ -56,21 +55,21 @@ export class TeamRepository {
   static addTeam(teamName: string) {
     const sanitisedName = teamName.replace(' ', '-');
     const teamSpreadSheet = TeamRepository.getOrCreateTeamSpreadsheet(
-      GoogleDriveService.getOrCreateWorkingFolder(),
+      GoogleDriveService.getOrCreateWorkingFolder()
     );
     teamSpreadSheet.insertSheet(sanitisedName);
   }
 
   static removeTeam(teamName: string) {
     const teamSpreadSheet = TeamRepository.getOrCreateTeamSpreadsheet(
-      GoogleDriveService.getOrCreateWorkingFolder(),
+      GoogleDriveService.getOrCreateWorkingFolder()
     );
     teamSpreadSheet.deleteSheet(teamSpreadSheet.getSheetByName(teamName));
   }
 
   static getTeams(): ViewModel[] {
     return TeamRepository.getOrCreateTeamSpreadsheet(
-      GoogleDriveService.getOrCreateWorkingFolder(),
+      GoogleDriveService.getOrCreateWorkingFolder()
     )
       .getSheets()
       .filter((sheet) => sheet.getName() !== Constants.DEFAULT_SHEET)
