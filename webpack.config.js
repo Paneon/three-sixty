@@ -119,14 +119,6 @@ const clientConfig = ({ isDevClientWrapper }) => ({
         use: [
           {
             loader: 'babel-loader',
-            // only enable react-refresh for dev builds, and not when building the dev client "wrapper"
-            options: {
-              plugins: [
-                !isProd &&
-                  !isDevClientWrapper &&
-                  require.resolve('react-refresh/babel'),
-              ].filter(Boolean),
-            },
           },
           {
             loader: 'ts-loader',
@@ -138,14 +130,6 @@ const clientConfig = ({ isDevClientWrapper }) => ({
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
-          // only enable react-refresh for dev builds, and not when building the dev client "wrapper"
-          options: {
-            plugins: [
-              !isProd &&
-                !isDevClientWrapper &&
-                require.resolve('react-refresh/babel'),
-            ].filter(Boolean),
-          },
         },
       },
       // we could add support for scss here
@@ -267,7 +251,8 @@ const clientConfigs = clientEntrypoints.map((clientEntrypoint) => {
 
 // webpack settings for devServer https://webpack.js.org/configuration/dev-server/
 const devServer = {
-  hot: true,
+  hot: false,
+  liveReload: false,
   port: PORT,
   server: 'https',
 };

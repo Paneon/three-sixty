@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Nav, Navbar, NavbarBrand } from 'react-bootstrap';
+import { Container, Nav, Navbar, NavbarBrand, NavLink } from 'react-bootstrap';
 import { HiHome } from 'react-icons/hi';
 import { FaAddressCard } from 'react-icons/fa6';
 import { RiAdminLine } from 'react-icons/ri';
@@ -12,15 +12,15 @@ export const NavBar = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           <Nav>
-            <Nav.Link href="">
+            <NavLink href="#/">
               <HiHome /> Home
-            </Nav.Link>
-            <Nav.Link href="#results">
+            </NavLink>
+            <NavLink href="#/results">
               <FaAddressCard /> Results
-            </Nav.Link>
-            <Nav.Link href="#admin">
+            </NavLink>
+            <NavLink href="#/admin">
               <RiAdminLine /> Admin
-            </Nav.Link>
+            </NavLink>
           </Nav>
         </Navbar.Collapse>
       </Container>

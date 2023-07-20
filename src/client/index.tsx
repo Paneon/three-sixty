@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { createHashRouter, RouterProvider } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 
 import './styles.css';
 import { HomePage } from './pages/HomePage';
@@ -9,32 +9,19 @@ import { Container } from 'react-bootstrap';
 import { ResultsPage } from './pages/ResultsPage';
 import { AdminPage } from './pages/AdminPage';
 
-const router = createHashRouter([
-  {
-    path: '/',
-    element: <HomePage />,
-  },
-  {
-    path: '/#',
-    element: <HomePage />,
-  },
-  {
-    path: '#results',
-    element: <ResultsPage />,
-  },
-  {
-    path: '#admin',
-    element: <AdminPage />,
-  },
-]);
-
 const container = document.getElementById('index');
 const root = createRoot(container);
 root.render(
   <React.StrictMode>
-    <NavBar />
-    <Container className="main">
-      <RouterProvider router={router} />
-    </Container>
+    <HashRouter>
+      <NavBar />
+      <Container className="main">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/results" element={<ResultsPage />} />
+          <Route path="/admin" element={<AdminPage />} />
+        </Routes>
+      </Container>
+    </HashRouter>
   </React.StrictMode>,
 );
