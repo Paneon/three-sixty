@@ -4,7 +4,17 @@ import { HiHome } from 'react-icons/hi';
 import { FaAddressCard } from 'react-icons/fa6';
 import { RiAdminLine } from 'react-icons/ri';
 
-export const NavBar = () => {
+interface Props {
+  onSwitchPage: (page) => void;
+}
+
+export enum Page {
+  HOME = 'home',
+  RESULTS = 'results',
+  ADMIN = 'admin',
+}
+
+export const NavBar = ({ onSwitchPage }) => {
   return (
     <Navbar className="bg-body-tertiary mb-4">
       <Container>
@@ -12,13 +22,13 @@ export const NavBar = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           <Nav>
-            <NavLink href="#/">
+            <NavLink onClick={(e) => onSwitchPage(Page.HOME)}>
               <HiHome /> Home
             </NavLink>
-            <NavLink href="#/results">
+            <NavLink onClick={(e) => onSwitchPage(Page.RESULTS)}>
               <FaAddressCard /> Results
             </NavLink>
-            <NavLink href="#/admin">
+            <NavLink onClick={(e) => onSwitchPage(Page.ADMIN)}>
               <RiAdminLine /> Admin
             </NavLink>
           </Nav>
