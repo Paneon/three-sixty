@@ -9,6 +9,17 @@ import { FeedbackRepository } from './repositories/FeedbackRepository';
 // eslint-disable-next-line no-console
 Logger.log('VERSION: 1.1');
 
+declare let global: { [functionName: string]: unknown };
+
+global.doGet = doGet;
+global.getTeams = getTeams;
+global.addTeam = addTeam;
+global.removeTeam = removeTeam;
+global.addPerson = addPerson;
+global.removePerson = removePerson;
+global.runFeedbackRound = runFeedbackRound;
+global.getFeedbackData = getFeedbackData;
+
 export function doGet(): HtmlOutput {
   return HtmlService.createTemplateFromFile('index').evaluate();
 }

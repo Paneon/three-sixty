@@ -1,4 +1,5 @@
 import { PersonRowColum } from './RowFactory';
+import { Person } from '../models/Person';
 
 export class PersonFactory {
   static createFromRow(row: string[]): Person {

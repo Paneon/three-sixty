@@ -5,20 +5,20 @@ import {
   addTeam,
   removeTeam,
   getTeams,
-} from '../App';
+} from '../server';
 
 interface ChainableFunction {
   withFailureHandler(
     callback: CallableFunction,
-  ): ChainableFunction | ScriptFunctions;
+  ): ChainableFunction & ScriptFunctions;
   withSuccessHandler(
     callback: CallableFunction,
-  ): ChainableFunction | ScriptFunctions;
+  ): ChainableFunction & ScriptFunctions;
 }
 
 export interface Google {
   script: {
-    run: ChainableFunction;
+    run: ChainableFunction & ScriptFunctions;
   };
 }
 

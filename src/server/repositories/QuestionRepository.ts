@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Question } from '../../../types/Question';
+import { Question } from '../../types/Question';
 import { QuestionDataRow, QuestionFactory } from '../factories/QuestionFactory';
 
 const RawQuestionArray = [

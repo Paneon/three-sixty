@@ -1,6 +1,6 @@
-import { Question } from '../../../types/Question';
-import { TeamValue } from '../../../types/TeamValue';
-import { Connotation } from '../../../types/Connotation';
+import { Question } from '../../types/Question';
+import { TeamValue } from '../../types/TeamValue';
+import { Connotation } from '../../types/Connotation';
 
 export type QuestionDataRow = (string | number)[];
 

@@ -1,26 +1,43 @@
 import React from 'react';
 import { serverFunctions } from '../utils/serverFunctions';
+import { TeamMemberRow } from './TeamMemberRow';
+import { Button, Card } from 'react-bootstrap';
+import { IPerson } from '../../types/IPerson';
 
 interface TeamCardProps {
   teamName: string;
-  members: Person[];
+  members: IPerson[];
   onRemovePerson: (
     firstName: string,
     lastName: string,
     teamName: string,
   ) => void;
+  onRemoveTeam: (teamName: string) => void;
 }
 export const TeamCard = ({
   teamName,
   members,
   onRemovePerson,
+  onRemoveTeam,
 }: TeamCardProps) => {
+  const showAddMemberModal = () => {};
+
+  const showRunFeedbackRoundModal = () => {};
+
+  const handleOnRemove = (firstName: string, lastName: string) => {
+    onRemovePerson(firstName, lastName, teamName);
+  };
+
+  const handleRemoveTeam = () => {
+    onRemoveTeam(teamName);
+  };
+
   return (
-    <div className="card">
-      <header className="card-header">
-        <p className="card-header-title title is-4">${teamName}</p>
-      </header>
-      <div className="card-content">
+    <Card>
+      <Card.Header>
+        <Card.Title>{teamName}</Card.Title>
+      </Card.Header>
+      <Card.Body>
         <table className="table is-fullwidth is-hoverable">
           <thead>
             <tr>
@@ -32,39 +49,33 @@ export const TeamCard = ({
             </tr>
           </thead>
           <tbody>
-            {members.map(({ firstName, lastName, role, email }) => {
+            {members.map((member, i) => {
               return (
-                <tr>
-                  <th>${firstName}</th>
-                  <th>${lastName}</th>
-                  <th>${role}</th>
-                  <th>${email}</th>
-                  <th>
-                    <a
-                      onClick={(e) =>
-                        onRemovePerson(firstName, lastName, teamName)
-                      }
-                    >
-                      Remove ${firstName}
-                    </a>
-                  </th>
-                </tr>
+                <TeamMemberRow
+                  key={i}
+                  member={member}
+                  onRemove={handleOnRemove}
+                />
               );
             })}
           </tbody>
         </table>
-      </div>
-      <footer className="card-footer">
-        <a id="${teamName}-add" className="card-footer-item">
+      </Card.Body>
+      <Card.Footer>
+        <Button variant="primary" onClick={showAddMemberModal} className="mr-1">
           Add Team Member
-        </a>
-        <a id="${teamName}-start" className="card-footer-item">
+        </Button>
+        <Button
+          variant="primary"
+          onClick={showRunFeedbackRoundModal}
+          className="mr-1"
+        >
           Run new feedback round
-        </a>
-        <a id="${teamName}-delete" className="card-footer-item">
+        </Button>
+        <Button variant="primary" onClick={handleRemoveTeam}>
           Delete Team
-        </a>
-      </footer>
-    </div>
+        </Button>
+      </Card.Footer>
+    </Card>
   );
 };

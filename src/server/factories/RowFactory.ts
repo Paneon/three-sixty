@@ -1,3 +1,5 @@
+import { Person } from '../models/Person';
+
 export enum PersonRowColum {
   FIRST_NAME = 0,
   LAST_NAME = 1,

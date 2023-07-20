@@ -7,26 +7,46 @@ import {
   Modal,
   ProgressBar,
   Form,
+  Toast,
 } from 'react-bootstrap';
-import { serverFunctions } from '../utils/serverFunctions';
 import { TeamCard } from '../components/TeamCard';
+import { Google } from '../../types/GoogleRunScript';
+import { serverFunctions } from '../utils/serverFunctions';
+import { ModalAddTeam } from '../components/ModalAddTeam';
+
+declare const google: Google;
 
 export const AdminPage = () => {
-  const [teamName, setTeamName] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [teams, setTeams] = useState([] as ViewModel[]);
+  const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [teams, setTeams] = useState([]);
 
-  const handleAddTeam = (e) => {
-    e.preventDefault();
+  const onSuccessHandler = (responseData) => {
+    setIsLoading(false);
+    if ('error' in responseData && responseData.error) {
+      setError(responseData.error);
+      return;
+    }
+    setTeams(responseData);
+  };
+
+  const onErrorHandler = (error: ErrorMessage) => {
+    setIsLoading(false);
+    setError(error.error);
+  };
+
+  const handleAddTeam = (teamName: string) => {
     setIsLoading(true);
-    serverFunctions.addTeam(teamName).then((r) => setTeams(r));
+    serverFunctions
+      .addTeam(teamName)
+      .then(onSuccessHandler)
+      .catch(onErrorHandler);
   };
 
   useEffect(() => {
-    serverFunctions.getTeams().then((data) => {
-      setTeams(data);
-    });
+    setIsLoading(true);
+    serverFunctions.getTeams().then(onSuccessHandler).catch(onErrorHandler);
   }, []);
 
   const handleOnRemovePerson = (
@@ -36,23 +56,44 @@ export const AdminPage = () => {
   ) => {
     serverFunctions
       .removePerson({ firstName, lastName, teamName })
-      .then((data) => {
-        setTeams(data);
-      });
+      .then(onSuccessHandler)
+      .catch(onErrorHandler);
+  };
+
+  const handleRemoveTeam = (teamName: string) => {
+    serverFunctions
+      .removeTeam(teamName)
+      .then(onSuccessHandler)
+      .catch(onErrorHandler);
   };
 
   return (
     <div id="admin-page">
+      <ModalAddTeam
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        onAddTeam={handleAddTeam}
+      />
+
+      <Toast show={!!error} onClose={() => setError(null)}>
+        <Toast.Header>
+          <strong className="me-auto">Error</strong>
+        </Toast.Header>
+        <Toast.Body>{error}</Toast.Body>
+      </Toast>
+
       <section className="section">
         <Container>
           <Row className="justify-content-md-center">
             <Col md="auto" id="team-details">
-              {teams.map((team) => {
+              {teams.map((team, i) => {
                 return (
                   <TeamCard
+                    key={i}
                     teamName={team.teamName}
                     members={team.members}
                     onRemovePerson={handleOnRemovePerson}
+                    onRemoveTeam={handleRemoveTeam}
                   />
                 );
               })}
@@ -61,7 +102,7 @@ export const AdminPage = () => {
         </Container>
       </section>
 
-      <section id="page-loading" className="section">
+      <section hidden={!isLoading} className="section">
         <Container>
           <Row className="justify-content-md-center">
             <Col md="auto">
@@ -86,35 +127,6 @@ export const AdminPage = () => {
           </Row>
         </Container>
       </section>
-
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add Team</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group controlId="add-team-name">
-              <Form.Label>Team Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="e.g. The trombones"
-                value={teamName}
-                onChange={(e) => setTeamName(e.target.value)}
-              />
-              <Form.Text className="text-muted">
-                Enter the name for your new team here
-              </Form.Text>
-            </Form.Group>
-            <Button
-              variant="primary"
-              onClick={handleAddTeam}
-              disabled={isLoading}
-            >
-              {isLoading ? 'Loading...' : 'Submit'}
-            </Button>
-          </Form>
-        </Modal.Body>
-      </Modal>
     </div>
   );
 };

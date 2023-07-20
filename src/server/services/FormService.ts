@@ -1,5 +1,5 @@
 import { QuestionRepository } from '../repositories/QuestionRepository';
-import { Answer } from '../../../types/Answer';
+import { Answer } from '../../types/Answer';
 import { Constants } from '../../../namespaces/Constants';
 
 export class FormService {
@@ -83,7 +83,7 @@ export class FormService {
     return this.createPolarForm(
       `Self-Reflection`,
       `Please give a couple of questions about how you see yourself.`,
-      true
+      true,
     );
   }
 
@@ -91,14 +91,14 @@ export class FormService {
     return this.createPolarForm(
       `${name}'s Team Feedback`,
       `Please answer a couple of questions about ${name}.`,
-      false
+      false,
     );
   }
 
   public createPolarForm(
     title: string,
     description: string,
-    isPersonal: boolean
+    isPersonal: boolean,
   ) {
     const questions = this.questionRepository.findAll();
 

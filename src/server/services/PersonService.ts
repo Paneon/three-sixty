@@ -2,6 +2,7 @@ import { GoogleDriveService } from './GoogleDriveService';
 import { FormService } from './FormService';
 import { TeamRepository } from '../repositories/TeamRepository';
 import { RowFactory } from '../factories/RowFactory';
+import { Person } from '../models/Person';
 
 export class PersonService {
   constructor(

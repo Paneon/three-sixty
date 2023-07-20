@@ -1,4 +1,4 @@
-class Person implements Person {
+export class Person {
   constructor(
     public firstName: string,
     public lastName: string,

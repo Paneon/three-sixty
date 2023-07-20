@@ -16,14 +16,19 @@ export const ResultsPage = () => {
 
   const handleSearchClick = () => {
     setIsLoading(true);
-    serverFunctions.getFeedbackData(searchValue).then((responseData) => {
-      setIsLoading(false);
-      if ('error' in responseData && responseData.error) {
-        setError(responseData.error);
-      } else {
-        setData(responseData);
-      }
-    });
+    serverFunctions
+      .getFeedbackData(searchValue)
+      .then((responseData) => {
+        setIsLoading(false);
+        if ('error' in responseData && responseData.error) {
+          setError(responseData.error);
+        } else {
+          setData(responseData);
+        }
+      })
+      .catch((e: ErrorMessage) => {
+        setError(e);
+      });
   };
 
   return (

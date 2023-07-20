@@ -198,14 +198,6 @@ const DynamicCdnWebpackPluginConfig = {
           version: packageVersion,
           url: `https://unpkg.com/@emotion/styled@${packageVersion}/dist/emotion-styled.umd.min.js`,
         };
-      // externalize gas-client to keep bundle size even smaller
-      case 'gas-client':
-        return {
-          name: packageName,
-          var: 'GASClient',
-          version: packageVersion,
-          url: `https://unpkg.com/gas-client@${packageVersion}/dist/index.js`,
-        };
       // must include peer dependencies for any custom imports
       case '@types/react':
         return {
