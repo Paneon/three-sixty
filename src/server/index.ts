@@ -1,13 +1,3 @@
-import {
-  onOpen,
-  openDialog,
-  openDialogBootstrap,
-  openDialogMUI,
-  openDialogTailwindCSS,
-  openAboutSidebar,
-} from './ui';
-
-import { getSheetsData, addSheet, deleteSheet, setActiveSheet } from './sheets';
 import HtmlOutput = GoogleAppsScript.HTML.HtmlOutput;
 import { TeamRepository } from './repositories/TeamRepository';
 import { PersonFactory } from './factories/PersonFactory';
@@ -60,7 +50,7 @@ export function addPerson({
 export function updatePerson(
   teamName: string,
   firstName: string,
-  lastName: string
+  lastName: string,
 ) {
   const person = PersonRepository.getPerson(teamName, firstName, lastName);
 }
@@ -81,18 +71,5 @@ export function removePerson({ firstName, lastName, teamName }): ViewModel[] {
 }
 
 export function getFeedbackData(name: string) {
-  FeedbackRepository.getFeedbackData(name);
+  return FeedbackRepository.getFeedbackData(name);
 }
-
-export {
-  onOpen,
-  openDialog,
-  openDialogBootstrap,
-  openDialogMUI,
-  openDialogTailwindCSS,
-  openAboutSidebar,
-  getSheetsData,
-  addSheet,
-  deleteSheet,
-  setActiveSheet,
-};

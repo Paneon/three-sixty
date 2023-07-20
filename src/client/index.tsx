@@ -6,6 +6,8 @@ import './styles.css';
 import { HomePage } from './pages/HomePage';
 import { NavBar } from './components/NavBar';
 import { Container } from 'react-bootstrap';
+import { ResultsPage } from './pages/ResultsPage';
+import { AdminPage } from './pages/AdminPage';
 
 const router = createHashRouter([
   {
@@ -18,11 +20,11 @@ const router = createHashRouter([
   },
   {
     path: '#results',
-    element: <HomePage />,
+    element: <ResultsPage />,
   },
   {
-    path: '/admin',
-    element: <HomePage />,
+    path: '#admin',
+    element: <AdminPage />,
   },
 ]);
 
@@ -34,5 +36,5 @@ root.render(
     <Container className="main">
       <RouterProvider router={router} />
     </Container>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
