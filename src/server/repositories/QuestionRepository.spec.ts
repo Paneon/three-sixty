@@ -1,5 +1,6 @@
 import { QuestionRepository } from './QuestionRepository';
 import { QuestionDataRow } from '../factories/QuestionFactory';
+import { describe, expect, test, vi } from 'vitest';
 
 describe('QuestionRepository', () => {
   const questions = [
@@ -14,10 +15,10 @@ describe('QuestionRepository', () => {
     ['knows their own weaknesses', 'Seek to improve', 1],
   ] as QuestionDataRow[];
 
-  it('findAll should return the questions as Question objects', () => {
+  test('findAll should return the questions as Question objects', () => {
     const questionRepo = new QuestionRepository();
 
-    jest.spyOn(questionRepo, 'getRawDataArray').mockReturnValue(questions);
+    vi.spyOn(questionRepo, 'getRawDataArray').mockReturnValue(questions);
 
     const findAll = questionRepo.findAll();
     expect(findAll).toHaveLength(questions.length);
@@ -26,10 +27,10 @@ describe('QuestionRepository', () => {
     expect(findAll[0]).toHaveProperty('connotation');
   });
 
-  it('shuffle should shuffle questions', () => {
+  test('Questions are shuffled', () => {
     const questionRepo = new QuestionRepository();
 
-    jest.spyOn(questionRepo, 'getRawDataArray').mockReturnValue(questions);
+    vi.spyOn(questionRepo, 'getRawDataArray').mockReturnValue(questions);
 
     const findAll = questionRepo.findAll();
     const shuffled = QuestionRepository.shuffle(findAll);
