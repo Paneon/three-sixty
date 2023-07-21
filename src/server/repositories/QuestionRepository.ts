@@ -96,8 +96,6 @@ const RawQuestionArray = [
 ];
 
 export class QuestionRepository {
-  constructor() {}
-
   getEngineerQuestions() {
     return [
       [

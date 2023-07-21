@@ -5,8 +5,6 @@ import { Email } from '../../../namespaces/Email';
 import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
 
 export class FeedbackRoundService {
-  constructor() {}
-
   run(teamSheet: Sheet) {
     const team = teamSheet.getDataRange().getValues();
 
@@ -29,27 +27,27 @@ export class FeedbackRoundService {
       (
         [firstName, lastName, email, pfid, tfid, psid, tsid, role, peers],
         i,
-        original
+        original,
       ) => {
         const personalSpreadsheet = SpreadsheetApp.openById(psid);
         const personalResultsSheet = personalSpreadsheet.getSheetByName(
-          Constants.DEFAULT_RESULTS_SHEET
+          Constants.DEFAULT_RESULTS_SHEET,
         );
         const newSheetRequired = personalResultsSheet.getLastRow() > 1;
         const numberOfRounds = personalSpreadsheet
           .getSheets()
           .filter(
-            (sheet) => sheet.getName() !== Constants.DEFAULT_SHEET
+            (sheet) => sheet.getName() !== Constants.DEFAULT_SHEET,
           ).length;
         if (newSheetRequired) {
           personalSpreadsheet.insertSheet(
             `Form Responses ${numberOfRounds + 1}`,
-            { template: personalResultsSheet }
+            { template: personalResultsSheet },
           );
         }
         const teamSpreadSheet = SpreadsheetApp.openById(tsid);
         const teamResultsSheet = teamSpreadSheet.getSheetByName(
-          Constants.DEFAULT_RESULTS_SHEET
+          Constants.DEFAULT_RESULTS_SHEET,
         );
         if (newSheetRequired) {
           teamSpreadSheet.insertSheet(`Form Responses ${numberOfRounds + 1}`, {
@@ -64,7 +62,7 @@ export class FeedbackRoundService {
           personalFormUrl,
           peers,
         });
-      }
+      },
     );
   }
 

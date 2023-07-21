@@ -62,13 +62,13 @@ export const TeamCard = ({
         </table>
       </Card.Body>
       <Card.Footer>
-        <Button variant="primary" onClick={showAddMemberModal} className="mr-1">
+        <Button variant="primary" onClick={showAddMemberModal} className="me-2">
           Add Team Member
         </Button>
         <Button
           variant="primary"
           onClick={showRunFeedbackRoundModal}
-          className="mr-1"
+          className="me-2"
         >
           Run new feedback round
         </Button>

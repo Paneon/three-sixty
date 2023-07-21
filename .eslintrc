@@ -1,19 +1,38 @@
 {
   "root": true,
-  "parser": "@babel/eslint-parser",
-  "extends": ["airbnb-base", "plugin:prettier/recommended"],
-  "plugins": ["prettier"],
-  "rules": {
-    "prettier/prettier": "error",
-    "camelcase": "warn",
-    "import/prefer-default-export": "warn",
-    "import/no-extraneous-dependencies": "warn",
-    "prefer-object-spread": "warn",
-    "spaced-comment":"off"
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "jest": true
   },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "babelOptions": {
-      "configFile": "./dev/.babelrc"
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react",
+    "@typescript-eslint"
+  ],
+  "rules": {
+    "no-console": "off",
+    "camelcase": "warn",
+    "prefer-object-spread": "warn",
+    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/no-unused-vars": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
     }
   }
 }
