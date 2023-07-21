@@ -1,19 +1,10 @@
 {
-  "ts-node": {
-    "transpileOnly": true,
-    "compilerOptions": {
-      "module": "commonjs",
-      "esModuleInterop": true
-    },
-    "esm": true
-  },
   "compilerOptions": {
-    "allowJs": true,
-    "checkJs": true,
-    "types": [
-      "google-apps-script",
-      "node",
-      "jest"
-    ]
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "types": ["gas-types-detailed"],
+    "jsx": "react",
+    "esModuleInterop": true
   }
 }

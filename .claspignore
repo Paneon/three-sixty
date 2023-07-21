@@ -1,7 +1,2 @@
-typescript.json
-package.json
-**/node_modules/**
-**/spec/**
-**/.idea/**
-convert_csv.ts
-**/*.spec.*
+main.js
+*-impl.html
