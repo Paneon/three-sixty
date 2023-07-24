@@ -63,10 +63,12 @@ export const AdminPage = () => {
 
     serverFunctions
       .addPerson({ firstName, lastName, email, role, team })
-      .then(() => {
+      .then((responseData) => {
         setProgress(0);
         clearInterval(interval);
-      });
+        onSuccessHandler(responseData);
+      })
+      .catch(onErrorHandler);
 
     interval = setInterval(() => {
       setProgress((prevState) => prevState + 2);
@@ -85,6 +87,7 @@ export const AdminPage = () => {
   };
 
   const handleRemoveTeam = (teamName: string) => {
+    setIsLoading(true);
     serverFunctions
       .removeTeam(teamName)
       .then(onSuccessHandler)

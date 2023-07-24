@@ -40,7 +40,7 @@ export const TeamCard = ({
   };
 
   return (
-    <Card>
+    <Card className="my-2">
       <Card.Header>
         <Card.Title>{teamName}</Card.Title>
       </Card.Header>
@@ -75,17 +75,21 @@ export const TeamCard = ({
         </table>
       </Card.Body>
       <Card.Footer>
-        <Button variant="primary" onClick={showAddMemberModal} className="me-2">
+        <Button
+          variant="outline-primary"
+          onClick={showAddMemberModal}
+          className="me-2"
+        >
           Add Team Member
         </Button>
         <Button
-          variant="primary"
+          variant="outline-secondary"
           onClick={showRunFeedbackRoundModal}
           className="me-2"
         >
           Run new feedback round
         </Button>
-        <Button variant="primary" onClick={handleRemoveTeam}>
+        <Button variant="warning" onClick={handleRemoveTeam}>
           Delete Team
         </Button>
       </Card.Footer>

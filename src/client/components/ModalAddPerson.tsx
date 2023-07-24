@@ -19,6 +19,7 @@ const AddPersonModal = ({ show, teamName, onAddPerson, onHide }: Props) => {
   const handleAddPerson = (e) => {
     e.preventDefault();
     onAddPerson(firstName, lastName, role, email, teamName);
+    onHide();
   };
 
   return (
