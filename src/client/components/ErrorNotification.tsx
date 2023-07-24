@@ -1,18 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Toast } from 'react-bootstrap';
 
 interface ErrorProps {
-  error: string | null;
+  errorMessage: string | null;
 }
 
-export const ErrorNotification = ({ error = null }: ErrorProps) => {
+export const ErrorNotification = ({ errorMessage = null }: ErrorProps) => {
+  const [error, setError] = useState<string | null>(errorMessage);
+
   if (!error) {
     return null;
   }
+
   return (
-    <div className="notification is-danger">
-      <button className="delete"></button>
-      <h1 className="title">Error</h1>
-      <h2 className="subtitle">${error}</h2>
-    </div>
+    <Toast
+      className="my-4"
+      show={!!error}
+      bg="warning"
+      onClose={() => setError(null)}
+    >
+      <Toast.Header>
+        <strong className="me-auto">Error</strong>
+      </Toast.Header>
+      <Toast.Body>{error}</Toast.Body>
+    </Toast>
   );
 };

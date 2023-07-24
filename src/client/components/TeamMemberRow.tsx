@@ -25,7 +25,7 @@ export const TeamMemberRow = ({ member, onRemove }: Props) => {
         {deletionInProgress ? (
           <Badge bg="warning">Deleting</Badge>
         ) : (
-          <Button variant="danger" onClick={triggerDeletion}>
+          <Button variant="danger" size="sm" onClick={triggerDeletion}>
             Remove {member.firstName}
           </Button>
         )}

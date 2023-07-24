@@ -1,26 +1,33 @@
-import React from 'react';
-import { serverFunctions } from '../utils/serverFunctions';
+import React, { useState } from 'react';
 import { TeamMemberRow } from './TeamMemberRow';
 import { Button, Card } from 'react-bootstrap';
 import { IPerson } from '../../types/IPerson';
+import {
+  TOnAddPerson,
+  TOnRemovePerson,
+  TOnRemoveTeam,
+} from '../pages/AdminPage';
+import ModalAddPerson from './ModalAddPerson';
 
 interface TeamCardProps {
   teamName: string;
   members: IPerson[];
-  onRemovePerson: (
-    firstName: string,
-    lastName: string,
-    teamName: string,
-  ) => void;
-  onRemoveTeam: (teamName: string) => void;
+  onRemovePerson: TOnRemovePerson;
+  onRemoveTeam: TOnRemoveTeam;
+  onAddPerson: TOnAddPerson;
 }
 export const TeamCard = ({
   teamName,
   members,
   onRemovePerson,
   onRemoveTeam,
+  onAddPerson,
 }: TeamCardProps) => {
-  const showAddMemberModal = () => {};
+  const [showModal, setShowModal] = useState(false);
+
+  const showAddMemberModal = () => {
+    setShowModal(true);
+  };
 
   const showRunFeedbackRoundModal = () => {};
 
@@ -38,6 +45,12 @@ export const TeamCard = ({
         <Card.Title>{teamName}</Card.Title>
       </Card.Header>
       <Card.Body>
+        <ModalAddPerson
+          show={showModal}
+          onAddPerson={onAddPerson}
+          teamName={teamName}
+          onHide={() => setShowModal(false)}
+        />
         <table className="table is-fullwidth is-hoverable">
           <thead>
             <tr>

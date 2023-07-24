@@ -1,10 +1,11 @@
 import { Button, Form, Modal } from 'react-bootstrap';
 import React, { useState } from 'react';
+import { TOnAddTeam } from '../pages/AdminPage';
 
 interface Props {
   show: boolean;
   onHide: VoidFunction;
-  onAddTeam: (teamName: string) => void;
+  onAddTeam: TOnAddTeam;
 }
 export const ModalAddTeam = ({ show, onHide, onAddTeam }: Props) => {
   const [teamName, setTeamName] = useState('');

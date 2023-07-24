@@ -1,5 +1,8 @@
 import React from 'react';
 
-export const SurveyRounds = ({ data }) => {
+interface Props {
+  data: Record<string, string>;
+}
+export const SurveyRounds = ({ data }: Props) => {
   return <div className="box"></div>;
 };

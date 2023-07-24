@@ -36,7 +36,7 @@ export const ResultsPage = () => {
       <Container>
         <Row className="justify-content-md-center">
           <Col md={8} id="results-header">
-            <ErrorNotification error={error} />
+            <ErrorNotification errorMessage={error} />
             <Card>
               <Card.Body>
                 <Form>
@@ -79,12 +79,12 @@ export const ResultsPage = () => {
 };
 
 function createVegaSpec(roundData) {
-  var width =
+  const width =
     window.innerWidth ||
     document.documentElement.clientWidth ||
     document.body.clientWidth;
-  var chartWidth = width * 0.5;
-  var chartHeight = chartWidth * 0.6;
+  const chartWidth = width * 0.5;
+  const chartHeight = chartWidth * 0.6;
   return {
     $schema: 'https://vega.github.io/schema/vega-lite/v3.json',
     description: '360 feedback output',
