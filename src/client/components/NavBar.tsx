@@ -14,11 +14,11 @@ export enum Page {
   ADMIN = 'admin',
 }
 
-export const NavBar = ({ onSwitchPage }) => {
+export const NavBar = ({ onSwitchPage }: Props) => {
   return (
     <Navbar className="bg-body-tertiary mb-4">
       <Container>
-        <NavbarBrand>360° v2</NavbarBrand>
+        <NavbarBrand>360°</NavbarBrand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           <Nav>

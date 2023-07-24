@@ -1,26 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Container,
-  Row,
-  Col,
-  Button,
-  Modal,
-  ProgressBar,
-  Form,
-  Toast,
-} from 'react-bootstrap';
-import { TeamCard } from '../components/TeamCard';
 import { Google } from '../../types/GoogleRunScript';
 import { serverFunctions } from '../utils/serverFunctions';
-import { ModalAddTeam } from '../components/ModalAddTeam';
+import { ViewModel } from '../../types/ViewModel';
+import { AdminPageLayout } from '../components/AdminPage.layout';
 
 declare const google: Google;
 
+export type TOnRemovePerson = (
+  firstName: string,
+  lastName: string,
+  teamName: string,
+) => void;
+export type TOnAddTeam = (teamName: string) => void;
+export type TOnRemoveTeam = (teamName: string) => void;
+
+export type TOnAddPerson = (
+  firstName: string,
+  lastName: string,
+  role: string,
+  email: string,
+  team: string,
+) => void;
+
+let interval;
+
 export const AdminPage = () => {
-  const [showModal, setShowModal] = useState(false);
   const [teams, setTeams] = useState([] as ViewModel[]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const onSuccessHandler = (responseData) => {
     setIsLoading(false);
@@ -44,10 +52,28 @@ export const AdminPage = () => {
       .catch(onErrorHandler);
   };
 
-  useEffect(() => {
-    setIsLoading(true);
-    serverFunctions.getTeams().then(onSuccessHandler).catch(onErrorHandler);
-  }, []);
+  const handleOnAddPerson: TOnAddPerson = (
+    firstName,
+    lastName,
+    role,
+    email,
+    team,
+  ) => {
+    setProgress(2);
+
+    serverFunctions
+      .addPerson({ firstName, lastName, email, role, team })
+      .then((responseData) => {
+        setProgress(0);
+        clearInterval(interval);
+        onSuccessHandler(responseData);
+      })
+      .catch(onErrorHandler);
+
+    interval = setInterval(() => {
+      setProgress((prevState) => prevState + 2);
+    }, 1000);
+  };
 
   const handleOnRemovePerson = (
     firstName: string,
@@ -61,72 +87,28 @@ export const AdminPage = () => {
   };
 
   const handleRemoveTeam = (teamName: string) => {
+    setIsLoading(true);
     serverFunctions
       .removeTeam(teamName)
       .then(onSuccessHandler)
       .catch(onErrorHandler);
   };
 
+  useEffect(() => {
+    setIsLoading(true);
+    serverFunctions.getTeams().then(onSuccessHandler).catch(onErrorHandler);
+  }, []);
+
   return (
-    <div id="admin-page">
-      <ModalAddTeam
-        show={showModal}
-        onHide={() => setShowModal(false)}
-        onAddTeam={handleAddTeam}
-      />
-
-      <Toast show={!!error} onClose={() => setError(null)}>
-        <Toast.Header>
-          <strong className="me-auto">Error</strong>
-        </Toast.Header>
-        <Toast.Body>{error}</Toast.Body>
-      </Toast>
-
-      <section className="section">
-        <Container>
-          <Row className="justify-content-md-center">
-            <Col md="auto" id="team-details">
-              {teams.map((team, i) => {
-                return (
-                  <TeamCard
-                    key={i}
-                    teamName={team.teamName}
-                    members={team.members}
-                    onRemovePerson={handleOnRemovePerson}
-                    onRemoveTeam={handleRemoveTeam}
-                  />
-                );
-              })}
-            </Col>
-          </Row>
-        </Container>
-      </section>
-
-      <section hidden={!isLoading} className="section">
-        <Container>
-          <Row className="justify-content-md-center">
-            <Col md="auto">
-              <ProgressBar now={45} striped variant="primary" />
-            </Col>
-          </Row>
-        </Container>
-      </section>
-
-      <section className="section">
-        <Container>
-          <Row className="justify-content-md-center">
-            <Col md="auto">
-              <Button
-                variant="primary"
-                size="lg"
-                onClick={() => setShowModal(true)}
-              >
-                Add Team
-              </Button>
-            </Col>
-          </Row>
-        </Container>
-      </section>
-    </div>
+    <AdminPageLayout
+      showLoading={isLoading}
+      progress={progress}
+      error={error}
+      teams={teams}
+      onAddPerson={handleOnAddPerson}
+      onRemovePerson={handleOnRemovePerson}
+      onAddTeam={handleAddTeam}
+      onRemoveTeam={handleRemoveTeam}
+    />
   );
 };

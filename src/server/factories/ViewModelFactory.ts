@@ -1,5 +1,6 @@
 import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
 import { PersonFactory } from './PersonFactory';
+import { ViewModel } from '../../types/ViewModel';
 
 export class ViewModelFactory {
   static createFromSheet(sheet: Sheet): ViewModel {

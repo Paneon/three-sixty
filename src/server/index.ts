@@ -5,6 +5,7 @@ import { PersonService } from './services/PersonService';
 import { PersonRepository } from './repositories/PersonRepository';
 import { FeedbackRoundService } from './services/FeedbackRoundService';
 import { FeedbackRepository } from './repositories/FeedbackRepository';
+import { ViewModel } from '../types/ViewModel';
 
 // eslint-disable-next-line no-console
 Logger.log('VERSION: 1.1');
