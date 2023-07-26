@@ -8,3 +8,12 @@ export interface IPerson {
   personalSpreadsheetId: string | null;
   teamSpreadsheetId: string | null;
 }
+
+export function isPerson(obj: unknown): obj is IPerson {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    'firstName' in obj &&
+    'lastName' in obj
+  );
+}

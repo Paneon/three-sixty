@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Google } from '../../types/GoogleRunScript';
 import { serverFunctions } from '../utils/serverFunctions';
-import { ViewModel } from '../../types/ViewModel';
+import { isViewModel, ViewModel } from '../../types/ViewModel';
 import { AdminPageLayout } from '../components/AdminPage.layout';
+import { IErrorMessage, isErrorMessage } from '../../types/Error';
 
 declare const google: Google;
 
@@ -22,24 +23,34 @@ export type TOnAddPerson = (
   team: string,
 ) => void;
 
-let interval;
+let interval: NodeJS.Timer;
 
 export const AdminPage = () => {
   const [teams, setTeams] = useState([] as ViewModel[]);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
 
-  const onSuccessHandler = (responseData) => {
+  const onSuccessHandler = (responseData: ViewModel[] | IErrorMessage) => {
     setIsLoading(false);
-    if ('error' in responseData && responseData.error) {
+
+    if (
+      Array.isArray(responseData) &&
+      responseData.every((item) => isViewModel(item))
+    ) {
+      setTeams(responseData);
+      return;
+    }
+
+    if (isErrorMessage(responseData)) {
       setError(responseData.error);
       return;
     }
-    setTeams(responseData);
+
+    throw Error('Invalid Response Data: ' + JSON.stringify(responseData));
   };
 
-  const onErrorHandler = (error: ErrorMessage) => {
+  const onErrorHandler = (error: IErrorMessage) => {
     setIsLoading(false);
     setError(error.error);
   };

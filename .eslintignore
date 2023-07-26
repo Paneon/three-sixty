@@ -1,3 +1,4 @@
 /dist
 /node_modules
-**/*.stories.*
+*.stories.tsx
+*.stories.ts

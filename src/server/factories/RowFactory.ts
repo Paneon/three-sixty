@@ -18,7 +18,7 @@ export class RowFactory {
     personalSpreadsheetId,
     teamFormId,
     teamSpreadsheetId,
-  ) {
+  ): string[] {
     return [
       person.firstName,
       person.lastName,
@@ -28,6 +28,6 @@ export class RowFactory {
       personalSpreadsheetId,
       teamSpreadsheetId,
       person.role,
-    ];
+    ] as string[];
   }
 }

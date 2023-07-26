@@ -1,5 +1,5 @@
 import { Button, Form, Modal } from 'react-bootstrap';
-import React, { useState } from 'react';
+import React, { FormEventHandler, useState } from 'react';
 import { TOnAddTeam } from '../pages/AdminPage';
 
 interface Props {
@@ -11,7 +11,7 @@ export const ModalAddTeam = ({ show, onHide, onAddTeam }: Props) => {
   const [teamName, setTeamName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit: FormEventHandler = (e) => {
     e.preventDefault();
     setIsLoading(true);
     onAddTeam(teamName);

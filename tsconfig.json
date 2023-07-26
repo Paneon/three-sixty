@@ -5,6 +5,7 @@
     "moduleResolution": "node",
     "types": ["gas-types-detailed"],
     "jsx": "react",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "strictNullChecks": true
   }
 }

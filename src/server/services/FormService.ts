@@ -1,13 +1,18 @@
 import { QuestionRepository } from '../repositories/QuestionRepository';
 import { Answer } from '../../types/Answer';
 import { Constants } from '../../../namespaces/Constants';
+import Form = GoogleAppsScript.Forms.Form;
 
 export class FormService {
   static VERSION = '1.1';
 
   constructor(private questionRepository = new QuestionRepository()) {}
 
-  private createMultipleChoiceGrid(form, question, helpText) {
+  private createMultipleChoiceGrid(
+    form: Form,
+    question: string,
+    helpText: string,
+  ) {
     form
       .addGridItem()
       .setTitle(question)
@@ -17,13 +22,13 @@ export class FormService {
       .setRequired(true);
   }
 
-  private createFormHead(form, title) {
+  private createFormHead(form: Form, title: string) {
     form.setTitle(title);
     form.setDescription('Version: ' + FormService.VERSION);
     return form;
   }
 
-  private addFeedbackTail(form) {
+  private addFeedbackTail(form: Form) {
     form.addPageBreakItem().setTitle('General Feedback');
     form
       .addTextItem()
@@ -36,7 +41,7 @@ export class FormService {
     return form;
   }
 
-  private addReflectionTail(form) {
+  private addReflectionTail(form: Form) {
     form.addPageBreakItem().setTitle('General Feedback');
     form
       .addTextItem()
@@ -99,10 +104,10 @@ export class FormService {
     title: string,
     description: string,
     isPersonal: boolean,
-  ) {
+  ): Form {
     const questions = this.questionRepository.findAll();
 
-    let form;
+    let form: Form;
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore

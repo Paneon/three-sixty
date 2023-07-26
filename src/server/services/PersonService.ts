@@ -16,26 +16,30 @@ export class PersonService {
     const name = person.name;
     const folder = GoogleDriveService.getOrCreateWorkingFolder();
 
-    const forms = [
-      this.formService.createSelfReflectionForm(),
-      this.formService.createFeedbackForm(name),
-    ];
-    const spreadsheets = [
-      SpreadsheetApp.create(`${name}'s Self-Reflection Results`),
-      SpreadsheetApp.create(`${name}'s Team Feedback Results`),
-    ];
-    const { 0: personalForm, 1: teamForm } = forms;
-    const [pfid, tfid, psid, tsid] = [...forms, ...spreadsheets].map((f) =>
-      f.getId(),
+    const teamForm = this.formService.createFeedbackForm(name);
+    const personalForm = this.formService.createSelfReflectionForm();
+
+    const personalSpreadsheet = SpreadsheetApp.create(
+      `${name}'s Self-Reflection Results`,
     );
+    const teamSpreadsheet = SpreadsheetApp.create(
+      `${name}'s Team Feedback Results`,
+    );
+
+    const spreadsheets = [personalSpreadsheet, teamSpreadsheet];
+
+    const pfid = personalForm.getId();
+    const tfid = teamForm.getId();
+    const psid = personalSpreadsheet.getId();
+    const tsid = teamSpreadsheet.getId();
+
     personalForm.setDestination(FormApp.DestinationType.SPREADSHEET, psid);
     teamForm.setDestination(FormApp.DestinationType.SPREADSHEET, tsid);
-    forms.forEach((file) =>
-      GoogleDriveService.addFileToWorkingFolder(folder, file),
+
+    [teamForm, personalForm, teamSpreadsheet, personalSpreadsheet].forEach(
+      (file) => GoogleDriveService.addFileToWorkingFolder(folder, file),
     );
-    spreadsheets.forEach((file) =>
-      GoogleDriveService.addFileToWorkingFolder(folder, file),
-    );
+
     TeamRepository.getOrCreateTeamSpreadsheet(folder)
       .getSheetByName(teamName)
       .appendRow(
