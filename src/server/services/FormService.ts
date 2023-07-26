@@ -1,26 +1,12 @@
 import { QuestionRepository } from '../repositories/QuestionRepository';
 import { Answer } from '../../types/Answer';
-import { Constants } from '../../../namespaces/Constants';
 import Form = GoogleAppsScript.Forms.Form;
+import { FORM_TEMPLATE } from '../config';
 
 export class FormService {
   static VERSION = '1.1';
 
   constructor(private questionRepository = new QuestionRepository()) {}
-
-  private createMultipleChoiceGrid(
-    form: Form,
-    question: string,
-    helpText: string,
-  ) {
-    form
-      .addGridItem()
-      .setTitle(question)
-      .setHelpText(helpText)
-      .setRows(['You...'])
-      .setColumns([Answer.YES, Answer.NO])
-      .setRequired(true);
-  }
 
   private createFormHead(form: Form, title: string) {
     form.setTitle(title);
@@ -54,36 +40,6 @@ export class FormService {
     return form;
   }
 
-  private createEngineerForm(title: string, isPersonal: boolean) {
-    const form = FormApp.create(title).setProgressBar(true);
-    this.createFormHead(form, title);
-    form.addPageBreakItem().setTitle('Their Role');
-    const questions = this.questionRepository.getEngineerQuestions();
-    questions.forEach(([k, v]) => this.createMultipleChoiceGrid(form, k, v));
-    //this.createFormTail(form, isPersonal);
-    return form;
-  }
-
-  private createProductForm(title: string, isPersonal: boolean) {
-    const questions = this.questionRepository.getProductQuestions();
-    const form = FormApp.create(title).setProgressBar(true);
-    this.createFormHead(form, title);
-    form.addPageBreakItem().setTitle('Their Role');
-    questions.forEach(([k, v]) => this.createMultipleChoiceGrid(form, k, v));
-    // this.createFormTail(form, isPersonal);
-    return form;
-  }
-
-  private createDeliveryForm(title: string, isPersonal: boolean) {
-    const questions = this.questionRepository.getDeliveryQuestions();
-    const form = FormApp.create(title).setProgressBar(true);
-    this.createFormHead(form, title);
-    form.addPageBreakItem().setTitle('Their Role');
-    questions.forEach(([k, v]) => this.createMultipleChoiceGrid(form, k, v));
-    // this.createFormTail(form, isPersonal);
-    return form;
-  }
-
   public createSelfReflectionForm() {
     return this.createPolarForm(
       `Self-Reflection`,
@@ -111,8 +67,8 @@ export class FormService {
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    if (Constants.FORM_TEMPLATE && Constants.FORM_TEMPLATE !== '') {
-      const copy = DriveApp.getFileById(Constants.FORM_TEMPLATE).makeCopy();
+    if (FORM_TEMPLATE && FORM_TEMPLATE !== '') {
+      const copy = DriveApp.getFileById(FORM_TEMPLATE).makeCopy();
       copy.setName(title);
       form = FormApp.openById(copy.getId());
     } else {

@@ -1,7 +1,7 @@
 import Spreadsheet = GoogleAppsScript.Spreadsheet.Spreadsheet;
 import Form = GoogleAppsScript.Forms.Form;
-import { Constants } from '../../../namespaces/Constants';
 import Folder = GoogleAppsScript.Drive.Folder;
+import { FOLDER } from '../config';
 
 export class GoogleDriveService {
   static addFileToWorkingFolder<T extends Spreadsheet | Form>(
@@ -16,9 +16,7 @@ export class GoogleDriveService {
   }
 
   static getOrCreateWorkingFolder(): Folder {
-    const folders = DriveApp.getFoldersByName(Constants.FOLDER);
-    return folders.hasNext()
-      ? folders.next()
-      : DriveApp.createFolder(Constants.FOLDER);
+    const folders = DriveApp.getFoldersByName(FOLDER);
+    return folders.hasNext() ? folders.next() : DriveApp.createFolder(FOLDER);
   }
 }

@@ -4,6 +4,7 @@ import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
 import { serverFunctions } from '../utils/serverFunctions';
 import { ErrorNotification } from '../components/ErrorNotification';
 import { SurveyRounds } from '../components/SurveyRounds';
+import { IErrorMessage } from '../../types/Error';
 
 export const ResultsPage = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -27,7 +28,7 @@ export const ResultsPage = () => {
           setData(responseData as ResultPayload[]);
         }
       })
-      .catch((e: ErrorMessage) => {
+      .catch((e: IErrorMessage) => {
         setError(e.error);
       });
   };

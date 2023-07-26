@@ -1,10 +1,10 @@
-import { Constants } from '../../../namespaces/Constants';
 import Folder = GoogleAppsScript.Drive.Folder;
 import Spreadsheet = GoogleAppsScript.Spreadsheet.Spreadsheet;
 import { GoogleDriveService } from '../services/GoogleDriveService';
 import { ViewModelFactory } from '../factories/ViewModelFactory';
 import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
 import { ViewModel } from '../../types/ViewModel';
+import { DEFAULT_SHEET } from '../config';
 
 export class TeamRepository {
   static TEAM_SHEET_NAME = 'teams';
@@ -73,7 +73,7 @@ export class TeamRepository {
       GoogleDriveService.getOrCreateWorkingFolder(),
     )
       .getSheets()
-      .filter((sheet) => sheet.getName() !== Constants.DEFAULT_SHEET)
+      .filter((sheet) => sheet.getName() !== DEFAULT_SHEET)
       .map((sheet) => ViewModelFactory.createFromSheet(sheet));
   }
 }
