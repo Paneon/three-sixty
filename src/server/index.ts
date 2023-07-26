@@ -10,7 +10,7 @@ import { ViewModel } from '../types/ViewModel';
 // eslint-disable-next-line no-console
 Logger.log('VERSION: 1.1');
 
-declare let global: { [functionName: string]: unknown };
+declare let global: Record<string, unknown>;
 
 global.doGet = doGet;
 global.getTeams = getTeams;
@@ -51,7 +51,7 @@ export function addPerson({
   email,
   role,
   team,
-}): ViewModel[] {
+}: Record<string, string>): ViewModel[] {
   const person = PersonFactory.create(firstName, lastName, email, role);
   const personService = new PersonService(person.name);
   personService.addPerson(person, team);
@@ -77,11 +77,16 @@ export function runFeedbackRound(teamName: string): string {
   return teamName;
 }
 
-export function removePerson({ firstName, lastName, teamName }): ViewModel[] {
+export function removePerson({
+  firstName,
+  lastName,
+  teamName,
+}: Record<string, string>): ViewModel[] {
   PersonRepository.removePerson({ firstName, lastName, teamName });
   return getTeams();
 }
 
 export function getFeedbackData(name: string) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return FeedbackRepository.getFeedbackData(name);
 }

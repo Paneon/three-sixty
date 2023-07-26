@@ -1,5 +1,4 @@
-import { TeamRepository } from '../repositories/TeamRepository';
-import { GoogleDriveService } from './GoogleDriveService';
+/* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return */
 import { Constants } from '../../../namespaces/Constants';
 import { Email } from '../../../namespaces/Email';
 import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
@@ -29,7 +28,7 @@ export class FeedbackRoundService {
         i,
         original,
       ) => {
-        const personalSpreadsheet = SpreadsheetApp.openById(psid);
+        const personalSpreadsheet = SpreadsheetApp.openById(psid as string);
         const personalResultsSheet = personalSpreadsheet.getSheetByName(
           Constants.DEFAULT_RESULTS_SHEET,
         );
@@ -45,7 +44,7 @@ export class FeedbackRoundService {
             { template: personalResultsSheet },
           );
         }
-        const teamSpreadSheet = SpreadsheetApp.openById(tsid);
+        const teamSpreadSheet = SpreadsheetApp.openById(tsid as string);
         const teamResultsSheet = teamSpreadSheet.getSheetByName(
           Constants.DEFAULT_RESULTS_SHEET,
         );
@@ -55,7 +54,9 @@ export class FeedbackRoundService {
           });
         }
 
-        const personalFormUrl = FormApp.openById(pfid).getPublishedUrl();
+        const personalFormUrl = FormApp.openById(
+          pfid as string,
+        ).getPublishedUrl();
         // TODO E-Mail Service
         Email.sendEmail(email, 'New 360 Feedback Round', {
           firstName,

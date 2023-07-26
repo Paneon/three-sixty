@@ -5,8 +5,8 @@ import Folder = GoogleAppsScript.Drive.Folder;
 
 export class GoogleDriveService {
   static addFileToWorkingFolder<T extends Spreadsheet | Form>(
-    folder,
-    file: T
+    folder: Folder,
+    file: T,
   ): T {
     const temp = DriveApp.getFileById(file.getId());
     folder.addFile(temp);

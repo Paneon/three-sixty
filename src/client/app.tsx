@@ -11,7 +11,7 @@ export const App = () => {
   return (
     <>
       <NavBar
-        onSwitchPage={(page) => {
+        onSwitchPage={(page: Page) => {
           setActivePage(page);
         }}
       />

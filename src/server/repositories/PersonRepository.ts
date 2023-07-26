@@ -5,7 +5,11 @@ import { PersonFactory } from '../factories/PersonFactory';
 import { Person } from '../models/Person';
 
 export class PersonRepository {
-  static removePerson({ firstName, lastName, teamName }) {
+  static removePerson({
+    firstName,
+    lastName,
+    teamName,
+  }: Record<string, string>) {
     const folder = GoogleDriveService.getOrCreateWorkingFolder();
     const teamSheet =
       TeamRepository.getOrCreateTeamSpreadsheet(folder).getSheetByName(
@@ -17,16 +21,21 @@ export class PersonRepository {
       lastName,
     );
     const { 0: docIds } = teamSheet.getRange(rowIndex, 4, 1, 4).getValues();
-    docIds.forEach((id) => folder.removeFile(DriveApp.getFileById(id)));
+    docIds.forEach((id: string) => folder.removeFile(DriveApp.getFileById(id)));
     teamSheet.deleteRow(rowIndex);
   }
 
-  static getPerson(teamName, firstName: string, lastName: string): Person {
+  static getPerson(
+    teamName: string,
+    firstName: string,
+    lastName: string,
+  ): Person {
     const teamRepository = new TeamRepository();
     const sheet = teamRepository.getTeamSheet(teamName);
 
     const index = PersonRepository.getPersonsIndex(sheet, firstName, lastName);
-    const data = sheet.getDataRange().getValues()[index - 1];
+    // TODO Remove typecasts
+    const data = sheet.getDataRange().getValues()[index - 1] as string[];
 
     return PersonFactory.createFromRow(data);
   }

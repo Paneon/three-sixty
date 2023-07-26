@@ -1,6 +1,5 @@
-import { Button, Form, Modal, ProgressBar } from 'react-bootstrap';
-import React, { useEffect, useState } from 'react';
-import { serverFunctions } from '../utils/serverFunctions';
+import { Button, Form, Modal } from 'react-bootstrap';
+import React, { FormEventHandler, useEffect, useState } from 'react';
 import { TOnAddPerson } from '../pages/AdminPage';
 
 interface Props {
@@ -16,7 +15,7 @@ const AddPersonModal = ({ show, teamName, onAddPerson, onHide }: Props) => {
   const [role, setRole] = useState('');
   const [email, setEmail] = useState('');
 
-  const handleAddPerson = (e) => {
+  const handleAddPerson: FormEventHandler = (e) => {
     e.preventDefault();
     onAddPerson(firstName, lastName, role, email, teamName);
     onHide();

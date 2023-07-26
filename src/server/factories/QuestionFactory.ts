@@ -9,11 +9,12 @@ export class QuestionFactory {
     try {
       return {
         title: row[0].toString(),
-        value: TeamValue[row[1]],
-        connotation: Connotation[row[2]],
+        value: TeamValue[row[1]] as TeamValue,
+        connotation: Connotation[row[2]] as Connotation,
       };
     } catch (e) {
       console.error(e);
+      throw e;
     }
   }
 

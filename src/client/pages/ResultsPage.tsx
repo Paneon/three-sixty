@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+/* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-assignment */
+import React, { FormEventHandler, useState } from 'react';
 import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
 import { serverFunctions } from '../utils/serverFunctions';
 import { ErrorNotification } from '../components/ErrorNotification';
@@ -7,8 +8,8 @@ import { SurveyRounds } from '../components/SurveyRounds';
 export const ResultsPage = () => {
   const [searchValue, setSearchValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
+  const [data, setData] = useState<ResultPayload[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   const handleInputChange = (event) => {
     setSearchValue(event.target.value);
@@ -23,11 +24,11 @@ export const ResultsPage = () => {
         if ('error' in responseData && responseData.error) {
           setError(responseData.error);
         } else {
-          setData(responseData);
+          setData(responseData as ResultPayload[]);
         }
       })
       .catch((e: ErrorMessage) => {
-        setError(e);
+        setError(e.error);
       });
   };
 

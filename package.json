@@ -19,7 +19,7 @@
     "deploy": "rimraf dist && npm run build && npx clasp push",
     "serve": "cross-env NODE_ENV=development webpack serve",
     "start": "npm run deploy:dev && npm run serve",
-    "lint": "eslint ./src/ --ext .ts,.tsx --fix --ignore-path .gitignore",
+    "lint": "eslint ./src/ --ext .ts,.tsx --fix",
     "storybook": "storybook dev -p 6006 --no-open",
     "build-storybook": "storybook build"
   },
@@ -71,7 +71,8 @@
     "@storybook/react-webpack5": "^7.1.0",
     "@storybook/testing-library": "^0.2.0",
     "@types/react": "^18.0.14",
-    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/eslint-plugin": "^6.2.0",
+    "@typescript-eslint/parser": "^6.2.0",
     "autoprefixer": "10.4.5",
     "aws-sdk": "^2.1106.0",
     "babel-loader": "^8.2.5",
