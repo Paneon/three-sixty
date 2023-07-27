@@ -145,6 +145,7 @@ Further reading:
 
 *   http://ro.uow.edu.au/commpapers/782/
 *   https://en.wikipedia.org/wiki/Yes%E2%80%93no_questions
+*   https://alexandernolte.github.io/download/Chounta%20and%20Nolte%20(2022)%20The%20CAT%20Effect%20Exploring%20the%20Impact%20of%20Casual%20Affective%20Triggers%20on%20Online%20Surveys%20Response%20Rates.pdf
 
 
 

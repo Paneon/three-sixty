@@ -14,6 +14,7 @@ export const App = () => {
         onSwitchPage={(page: Page) => {
           setActivePage(page);
         }}
+        version={process.env.VERSION}
       />
       <Container className="main">
         {activePage === Page.ADMIN && <AdminPage />}

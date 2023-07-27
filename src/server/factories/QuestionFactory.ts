@@ -1,11 +1,11 @@
-import { Question } from '../../types/Question';
+import { IQuestion } from '../../types/IQuestion';
 import { TeamValue } from '../../types/TeamValue';
 import { Connotation } from '../../types/Connotation';
 
 export type QuestionDataRow = (string | number)[];
 
 export class QuestionFactory {
-  static createFromRawDataRow(row: QuestionDataRow): Question {
+  static createFromRawDataRow(row: QuestionDataRow): IQuestion {
     try {
       return {
         title: row[0].toString(),

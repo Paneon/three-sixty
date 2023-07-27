@@ -6,6 +6,7 @@ import { RiAdminLine } from 'react-icons/ri';
 
 interface Props {
   onSwitchPage: (page) => void;
+  version?: string;
 }
 
 export enum Page {
@@ -14,11 +15,11 @@ export enum Page {
   ADMIN = 'admin',
 }
 
-export const NavBar = ({ onSwitchPage }: Props) => {
+export const NavBar = ({ onSwitchPage, version }: Props) => {
   return (
     <Navbar className="bg-body-tertiary mb-4">
       <Container>
-        <NavbarBrand>360°</NavbarBrand>
+        <NavbarBrand>360° {version ? ` - ${version}` : ''}</NavbarBrand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           <Nav>

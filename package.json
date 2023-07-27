@@ -1,6 +1,6 @@
 {
   "name": "three-sixty",
-  "version": "1.0.0",
+  "version": "1.0.7",
   "description": "A simple three sixty feedback tool",
   "repository": {
     "type": "git",
@@ -13,8 +13,8 @@
     "open": "clasp open --addon",
     "setup:https": "mkdir certs && mkcert -key-file ./certs/key.pem -cert-file ./certs/cert.pem localhost 127.0.0.1",
     "build:dev:watch": "cross-env NODE_ENV=development webpack --watch",
-    "build:dev": "cross-env NODE_ENV=development webpack",
-    "build": "cross-env NODE_ENV=production webpack",
+    "build:dev": "npm version patch --no-git-tag-version && cross-env NODE_ENV=development webpack",
+    "build": "npm version patch --no-git-tag-version && cross-env NODE_ENV=production webpack",
     "deploy:dev": "rimraf dist && npm run build:dev && npx clasp push",
     "deploy": "rimraf dist && npm run build && npx clasp push",
     "serve": "cross-env NODE_ENV=development webpack serve",

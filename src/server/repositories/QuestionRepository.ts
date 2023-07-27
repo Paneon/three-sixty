@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Question } from '../../types/Question';
+import { IQuestion } from '../../types/IQuestion';
 import { QuestionDataRow, QuestionFactory } from '../factories/QuestionFactory';
 
 const RawQuestionArray = [
@@ -231,7 +231,7 @@ export class QuestionRepository {
     ];
   }
 
-  findAll(): Question[] {
+  findAll(): IQuestion[] {
     const dataArray = this.getRawDataArray();
     const questions = QuestionFactory.createFromRawDataRows(dataArray);
 
@@ -242,7 +242,7 @@ export class QuestionRepository {
     return RawQuestionArray;
   }
 
-  static shuffle(array: Question[]) {
+  static shuffle(array: IQuestion[]) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       const temp = array[i];

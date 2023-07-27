@@ -1,7 +1,7 @@
 import Spreadsheet = GoogleAppsScript.Spreadsheet.Spreadsheet;
 import Form = GoogleAppsScript.Forms.Form;
 import Folder = GoogleAppsScript.Drive.Folder;
-import { FOLDER } from '../config';
+import { FOLDER } from '../../shared/config';
 
 export class GoogleDriveService {
   static addFileToWorkingFolder<T extends Spreadsheet | Form>(

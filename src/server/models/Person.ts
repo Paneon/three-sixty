@@ -4,10 +4,10 @@ export class Person {
     public lastName: string,
     public email: string,
     public role: string,
-    public personalFormId: string = null,
-    public teamFormId: string = null,
-    public personalSpreadsheetId: string = null,
-    public teamSpreadsheetId: string = null,
+    public personalFormId: string | null = null,
+    public teamFormId: string | null = null,
+    public personalSpreadsheetId: string | null = null,
+    public teamSpreadsheetId: string | null = null,
   ) {}
 
   get name() {

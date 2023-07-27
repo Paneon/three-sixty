@@ -4,7 +4,7 @@ import { GoogleDriveService } from '../services/GoogleDriveService';
 import { ViewModelFactory } from '../factories/ViewModelFactory';
 import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
 import { ViewModel } from '../../types/ViewModel';
-import { DEFAULT_SHEET } from '../config';
+import { DEFAULT_SHEET } from '../../shared/config';
 
 export class TeamRepository {
   static TEAM_SHEET_NAME = 'teams';
