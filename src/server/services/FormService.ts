@@ -1,26 +1,17 @@
 import { QuestionRepository } from '../repositories/QuestionRepository';
 import { Answer } from '../../types/Answer';
-import { Constants } from '../../../namespaces/Constants';
 import Form = GoogleAppsScript.Forms.Form;
+import { FORM_TEMPLATE, QUESTIONS_PER_PAGE } from '../../shared/config';
+import { IQuestion } from '../../types/IQuestion';
+
+interface IPage {
+  questionTitles: string[];
+}
 
 export class FormService {
   static VERSION = '1.1';
 
   constructor(private questionRepository = new QuestionRepository()) {}
-
-  private createMultipleChoiceGrid(
-    form: Form,
-    question: string,
-    helpText: string,
-  ) {
-    form
-      .addGridItem()
-      .setTitle(question)
-      .setHelpText(helpText)
-      .setRows(['You...'])
-      .setColumns([Answer.YES, Answer.NO])
-      .setRequired(true);
-  }
 
   private createFormHead(form: Form, title: string) {
     form.setTitle(title);
@@ -54,36 +45,6 @@ export class FormService {
     return form;
   }
 
-  private createEngineerForm(title: string, isPersonal: boolean) {
-    const form = FormApp.create(title).setProgressBar(true);
-    this.createFormHead(form, title);
-    form.addPageBreakItem().setTitle('Their Role');
-    const questions = this.questionRepository.getEngineerQuestions();
-    questions.forEach(([k, v]) => this.createMultipleChoiceGrid(form, k, v));
-    //this.createFormTail(form, isPersonal);
-    return form;
-  }
-
-  private createProductForm(title: string, isPersonal: boolean) {
-    const questions = this.questionRepository.getProductQuestions();
-    const form = FormApp.create(title).setProgressBar(true);
-    this.createFormHead(form, title);
-    form.addPageBreakItem().setTitle('Their Role');
-    questions.forEach(([k, v]) => this.createMultipleChoiceGrid(form, k, v));
-    // this.createFormTail(form, isPersonal);
-    return form;
-  }
-
-  private createDeliveryForm(title: string, isPersonal: boolean) {
-    const questions = this.questionRepository.getDeliveryQuestions();
-    const form = FormApp.create(title).setProgressBar(true);
-    this.createFormHead(form, title);
-    form.addPageBreakItem().setTitle('Their Role');
-    questions.forEach(([k, v]) => this.createMultipleChoiceGrid(form, k, v));
-    // this.createFormTail(form, isPersonal);
-    return form;
-  }
-
   public createSelfReflectionForm() {
     return this.createPolarForm(
       `Self-Reflection`,
@@ -109,10 +70,8 @@ export class FormService {
 
     let form: Form;
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    if (Constants.FORM_TEMPLATE && Constants.FORM_TEMPLATE !== '') {
-      const copy = DriveApp.getFileById(Constants.FORM_TEMPLATE).makeCopy();
+    if (FORM_TEMPLATE && FORM_TEMPLATE !== '') {
+      const copy = DriveApp.getFileById(FORM_TEMPLATE).makeCopy();
       copy.setName(title);
       form = FormApp.openById(copy.getId());
     } else {
@@ -127,26 +86,31 @@ export class FormService {
     form.setShowLinkToRespondAgain(false);
     this.createFormHead(form, title);
 
-    form.addPageBreakItem();
-    const gridItem = form.addGridItem();
+    if (QUESTIONS_PER_PAGE > 0) {
+      const pages = this.splitQuestionsIntoPages(questions, 10);
+      pages.forEach((page, pageIndex) => {
+        // Create a new page in the form
+        form.addPageBreakItem();
 
-    gridItem
-      .setTitle(`Statements`)
-      .setRows(questions.map((question) => question.title))
-      .setColumns([Answer.YES, Answer.NO]);
+        const gridItem = form.addGridItem();
 
-    // const pages = this.splitQuestionsIntoPages(10);
-    // pages.forEach((page, pageIndex) => {
-    //   // Create a new page in the form
-    //   form.addPageBreakItem().setTitle(`Statements`);
-    //
-    //   const gridItem = form.addGridItem();
-    //
-    //   gridItem
-    //     .setTitle(`Statements`)
-    //     .setRows(page.questions)
-    //     .setColumns([Answer.YES, Answer.NO]);
-    // });
+        gridItem
+          .setTitle(`Statements`)
+          .setRows(page.questionTitles)
+          .setColumns([Answer.YES, Answer.NO]);
+
+        this.addCAT(form);
+      });
+    } else {
+      form.addPageBreakItem();
+      const gridItem = form.addGridItem();
+      gridItem
+        .setTitle(`Statements`)
+        .setRows(questions.map((question) => question.title))
+        .setColumns([Answer.YES, Answer.NO]);
+
+      this.addCAT(form);
+    }
 
     form = isPersonal
       ? this.addReflectionTail(form)
@@ -155,13 +119,35 @@ export class FormService {
     return form;
   }
 
-  // public createFeedbackForm(title: string, isPersonal: boolean, role: string) {
-  // if (role === Constants.PRODUCT_MANAGER) {
-  //   return this.createProductForm(title, isPersonal);
-  // } else if (role === Constants.SCRUM_MASTER) {
-  //   return this.createDeliveryForm(title, isPersonal);
-  // } else {
-  //   return this.createEngineerForm(title, isPersonal);
-  // }
-  // }
+  private addCAT(form: GoogleAppsScript.Forms.Form) {
+    const item = form.addImageItem();
+    // Gets the Google icon to use as the image.
+    const img = UrlFetchApp.fetch('https://loremflickr.com/400/400/cute,pet');
+
+    // Sets the image, title, and description for the item.
+    item
+      .setTitle('Well done! Here is an image of a cute pet to freshen up.')
+      .setImage(img);
+  }
+
+  public splitQuestionsIntoPages(
+    questions: IQuestion[],
+    pageSize: number,
+  ): IPage[] {
+    let index = 0;
+    const arrayLength = questions.length;
+    const pages: IPage[] = [];
+
+    for (index = 0; index < arrayLength; index += pageSize) {
+      const chunk = questions
+        .slice(index, index + pageSize)
+        .map((q) => q.title);
+
+      pages.push({
+        questionTitles: chunk,
+      });
+    }
+
+    return pages;
+  }
 }

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return */
-import { Constants } from '../../../namespaces/Constants';
 import { Email } from '../../../namespaces/Email';
 import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
+import { DEFAULT_RESULTS_SHEET, DEFAULT_SHEET } from '../../shared/config';
 
 export class FeedbackRoundService {
   run(teamSheet: Sheet) {
@@ -30,14 +30,12 @@ export class FeedbackRoundService {
       ) => {
         const personalSpreadsheet = SpreadsheetApp.openById(psid as string);
         const personalResultsSheet = personalSpreadsheet.getSheetByName(
-          Constants.DEFAULT_RESULTS_SHEET,
+          DEFAULT_RESULTS_SHEET,
         );
         const newSheetRequired = personalResultsSheet.getLastRow() > 1;
         const numberOfRounds = personalSpreadsheet
           .getSheets()
-          .filter(
-            (sheet) => sheet.getName() !== Constants.DEFAULT_SHEET,
-          ).length;
+          .filter((sheet) => sheet.getName() !== DEFAULT_SHEET).length;
         if (newSheetRequired) {
           personalSpreadsheet.insertSheet(
             `Form Responses ${numberOfRounds + 1}`,
@@ -46,7 +44,7 @@ export class FeedbackRoundService {
         }
         const teamSpreadSheet = SpreadsheetApp.openById(tsid as string);
         const teamResultsSheet = teamSpreadSheet.getSheetByName(
-          Constants.DEFAULT_RESULTS_SHEET,
+          DEFAULT_RESULTS_SHEET,
         );
         if (newSheetRequired) {
           teamSpreadSheet.insertSheet(`Form Responses ${numberOfRounds + 1}`, {

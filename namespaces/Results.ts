@@ -1,5 +1,6 @@
-import { Constants } from './Constants';
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
+import { DEFAULT_RESULTS_SHEET, DEFAULT_SHEET } from '../src/shared/config';
 
 export namespace Results {
   const VALUE_MAPPING: Record<string, number> = {
@@ -92,8 +93,7 @@ export namespace Results {
   ): ResultPayload[] {
     const personalSpreadsheet = SpreadsheetApp.openById(personalSpreadsheetId);
     const teamSpreadsheet = SpreadsheetApp.openById(teamSpreadsheetId);
-    const isNotDefaultSheet = (sheet) =>
-      sheet.getName() !== Constants.DEFAULT_SHEET;
+    const isNotDefaultSheet = (sheet) => sheet.getName() !== DEFAULT_SHEET;
     const personalSheets = personalSpreadsheet
       .getSheets()
       .filter(isNotDefaultSheet);
@@ -103,10 +103,10 @@ export namespace Results {
     const rowsPerRoundPersonal = personalSheets.map(getRowsPerRound).reverse();
     const rowsPerRoundTeam = teamSheets.map(getRowsPerRound).reverse();
     const personalData = sheetData(
-      personalSpreadsheet.getSheetByName(Constants.DEFAULT_RESULTS_SHEET),
+      personalSpreadsheet.getSheetByName(DEFAULT_RESULTS_SHEET),
     );
     const teamData = sheetData(
-      teamSpreadsheet.getSheetByName(Constants.DEFAULT_RESULTS_SHEET),
+      teamSpreadsheet.getSheetByName(DEFAULT_RESULTS_SHEET),
     );
     const groupRounds = (data) => (result, n, i, original) => {
       if (i === original.length - 1) {

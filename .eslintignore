@@ -2,3 +2,5 @@
 /node_modules
 *.stories.tsx
 *.stories.ts
+webpack.config.js
+namespaces/*

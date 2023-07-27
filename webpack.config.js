@@ -224,6 +224,7 @@ const clientConfigs = clientEntrypoints.map((clientEntrypoint) => {
       //!isProd && new ReactRefreshWebpackPlugin(),
       new webpack.DefinePlugin({
         'process.env': JSON.stringify(envVars),
+        'process.env.VERSION': JSON.stringify(process.env.npm_package_version),
       }),
       new HtmlWebpackPlugin({
         template: clientEntrypoint.template,
@@ -278,6 +279,7 @@ const devClientConfigs = clientEntrypoints.map((clientEntrypoint) => {
     plugins: [
       new webpack.DefinePlugin({
         'process.env': JSON.stringify(envVars),
+        'process.env.VERSION': JSON.stringify(process.env.npm_package_version),
       }),
       new HtmlWebpackPlugin({
         template: './dev/index.html',
@@ -363,6 +365,18 @@ const serverConfig = {
     new GasPlugin({
       // removes need for assigning public server functions to "global"
       autoGlobalExportsFiles: [serverEntry],
+    }),
+    new webpack.DefinePlugin({
+      'process.env.QUESTIONS_PER_PAGE': JSON.stringify(
+        envVars.QUESTIONS_PER_PAGE,
+      ),
+      'process.env.FORM_TEMPLATE': JSON.stringify(envVars.FORM_TEMPLATE),
+      'process.env.DRIVE_FOLDER': JSON.stringify(envVars.DRIVE_FOLDER),
+      'process.env.DEFAULT_SHEET': JSON.stringify(envVars.DEFAULT_SHEET),
+      'process.env.DEFAULT_RESULTS_SHEET': JSON.stringify(
+        envVars.DEFAULT_RESULTS_SHEET,
+      ),
+      'process.env.VERSION': JSON.stringify(process.env.npm_package_version),
     }),
   ],
 };
