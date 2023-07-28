@@ -17,14 +17,10 @@ export class PersonService {
     const folder = GoogleDriveService.getOrCreateWorkingFolder();
 
     const teamForm = this.formService.createFeedbackForm(name);
-    const personalForm = this.formService.createSelfReflectionForm();
+    const personalForm = this.formService.createSelfReflectionForm(name);
 
-    const personalSpreadsheet = SpreadsheetApp.create(
-      `${name}'s Self-Reflection Results`,
-    );
-    const teamSpreadsheet = SpreadsheetApp.create(
-      `${name}'s Team Feedback Results`,
-    );
+    const personalSpreadsheet = SpreadsheetApp.create(`${name}'s Self-Reflection Results`);
+    const teamSpreadsheet = SpreadsheetApp.create(`${name}'s Team Feedback Results`);
 
     const spreadsheets = [personalSpreadsheet, teamSpreadsheet];
 
@@ -36,15 +32,11 @@ export class PersonService {
     personalForm.setDestination(FormApp.DestinationType.SPREADSHEET, psid);
     teamForm.setDestination(FormApp.DestinationType.SPREADSHEET, tsid);
 
-    [teamForm, personalForm, teamSpreadsheet, personalSpreadsheet].forEach(
-      (file) => GoogleDriveService.addFileToWorkingFolder(folder, file),
-    );
+    [teamForm, personalForm, teamSpreadsheet, personalSpreadsheet].forEach((file) => GoogleDriveService.addFileToWorkingFolder(folder, file));
 
     TeamRepository.getOrCreateTeamSpreadsheet(folder)
       .getSheetByName(teamName)
-      .appendRow(
-        RowFactory.createPersonOfTeamRow(person, pfid, psid, tfid, tsid),
-      );
+      .appendRow(RowFactory.createPersonOfTeamRow(person, pfid, psid, tfid, tsid));
 
     // Release Lock
     Utilities.sleep(15000);

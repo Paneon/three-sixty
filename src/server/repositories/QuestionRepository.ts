@@ -1,239 +1,101 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { IQuestion } from '../../types/IQuestion';
 import { QuestionDataRow, QuestionFactory } from '../factories/QuestionFactory';
+import { TeamValue } from '../../types/TeamValue';
+import { Connotation } from '../../types/Connotation';
 
-const RawQuestionArray = [
-  ['incorporates constructive feedback', 'Seek to improve', 1],
-  ['is open to feedback', 'Seek to improve', 1],
-  ['knows their own weaknesses', 'Seek to improve', 1],
-  ["openly admits they don't know something", 'Seek to improve', 1],
-  ['self-drives their development', 'Seek to improve', 1],
-  ['gives useful feedback to me', 'Seek to improve', 1],
-  ['regularly shares knowledge', 'Seek to improve', 1],
-  ['appears to meetings on time', 'Teamwork', 1],
-  ['is empathetic', 'Teamwork', 1],
-  ["values other people's opinions", 'Teamwork', 1],
-  ['offers help to others', 'Teamwork', 1],
-  ['spends time to answer questions', 'Teamwork', 1],
-  ['is a good mentor', 'Teamwork', 1],
-  ['treats others with respect', 'Teamwork', 1],
-  ['actively participates in group meetings', 'Teamwork', 1],
-  ['apologizes for failures', 'Teamwork', 1],
-  ['is friendly', 'Teamwork', 1],
-  ["respects other people's opinions", 'Teamwork', 1],
-  ['is fair', 'Teamwork', 1],
-  ['is judgemental', 'Teamwork', 0],
-  ['is open-minded', 'Teamwork', 1],
-  ['is good at negotiations', 'Teamwork', 1],
-  ['is good at coaching others', 'Teamwork', 1],
-  ['expects others to take the lead', 'Teamwork', 0],
-  ['can lead a discussion', 'Teamwork', 1],
-  ['is a good listener', 'Teamwork', 1],
-  ['is passive', 'Teamwork', 0],
-  ['regularly supports me in my work', 'Teamwork', 1],
-  ['rushes decisions', 'Delivery', 0],
-  ['avoids decisions', 'Delivery', 0],
-  ['takes responsibility for their actions', 'Delivery', 1],
-  ['does reviews on time', 'Delivery', 1],
-  ['is passionate about their work', 'Delivery', 1],
-  ['can manage stress', 'Delivery', 1],
-  ['keeps commitments', 'Delivery', 1],
-  ['proactively uses feature flags', 'Delivery', 1],
-  ['supports finishing team commitment of our sprints', 'Delivery', 1],
-  ['delivered a feature that had a lot of uncertainty', 'Delivery', 1],
-  ['shares their opinion actively', 'Communication', 1],
-  ['is the voice of reason', 'Communication', 1],
-  ['communicates well', 'Communication', 1],
-  ['communicates their actions well', 'Communication', 1],
-  ['speaks in understandable terms', 'Communication', 1],
-  ['gives clear status updates in the daily', 'Communication', 1],
-  ['clarifies questions early on', 'Communication', 1],
-  ['communicates complex ideas skillfully', 'Communication', 1],
-  ['takes ownership of their products', 'Ownership', 1],
-  ['finishes their tasks before the end of the sprint', 'Ownership', 1],
-  ['Helps improving our monitoring', 'Ownership', 1],
-  ['is a great firefighter', 'Ownership', 1],
-  ['acts responsibly', 'Strategic Thinking', 1],
-  ['executes requirements accurately', 'Strategic Thinking', 1],
-  [
-    "brings the customer's perspective into discussions",
-    'Strategic Thinking',
-    1,
-  ],
-  [
-    'Asks for details to understand the impact during refinement',
-    'Strategic Thinking',
-    1,
-  ],
-  ['involved in the definition of the team strategy', 'Strategic Thinking', 1],
-  ['advocates for the technical strategy', 'Strategic Thinking', 1],
-  ['understands our team goals', 'Strategic Thinking', 1],
-  ['acts according to our companies priorities', 'Strategic Thinking', 1],
-  ['exhibits leadership qualities in their position', 'Mastery', 1],
-  ['gives a professional impression', 'Mastery', 1],
-  ['delivers high quality work', 'Mastery', 1],
-  ['is pragmatic', 'Mastery', 1],
-  ['does careful reviews', 'Mastery', 1],
-  ['has a professional attitude', 'Mastery', 1],
-  ['is a role model', 'Mastery', 1],
-  ['can execute their tasks independently', 'Mastery', 1],
-  ['cares about quality', 'Mastery', 1],
-  ['is someone I can learn from', 'Mastery', 1],
-  ['is knowledgable', 'Mastery', 1],
-  ['works effectively', 'Mastery', 1],
-  ['is enjoyable to work with', 'Mastery', 1],
-  ['actively seeks solutions', 'Mastery', 1],
-  ['takes unnecessary risks', 'Mastery', 0],
-  ['assesses risks before taking actions', 'Mastery', 1],
-  ['has endurance for the long haul', 'Mastery', 1],
-  ['can communicate a clear vision', 'Mastery', 1],
-  ['thinks in long term solutions instead of quick fixes', 'Mastery', 1],
-  ['pays attention to detail', 'Mastery', 1],
-  ['finds innovative solutions to problems', 'Mastery', 1],
-  ['is good at researching problems', 'Mastery', 1],
-  ['is good at troubleshooting', 'Mastery', 1],
-  ['is focused', 'Mastery', 1],
+const RawQuestionArray: QuestionDataRow[] = [
+  ['incorporates constructive feedback', TeamValue.SEEK_TO_IMPROVE, Connotation.POSITIVE],
+  ['is open to feedback', TeamValue.SEEK_TO_IMPROVE, Connotation.POSITIVE],
+  ['knows their own weaknesses', TeamValue.SEEK_TO_IMPROVE, Connotation.POSITIVE],
+  ["openly admits they don't know something", TeamValue.SEEK_TO_IMPROVE, Connotation.POSITIVE],
+  ['self-drives their development', TeamValue.SEEK_TO_IMPROVE, Connotation.POSITIVE],
+  ['gives useful feedback to me', TeamValue.SEEK_TO_IMPROVE, Connotation.POSITIVE],
+  ['regularly shares knowledge', TeamValue.SEEK_TO_IMPROVE, Connotation.POSITIVE],
+  ['appears to meetings on time', TeamValue.TEAMWORK, Connotation.POSITIVE],
+  ['is empathetic', TeamValue.TEAMWORK, Connotation.POSITIVE],
+  ["values other people's opinions", TeamValue.TEAMWORK, Connotation.POSITIVE],
+  ['offers help to others', TeamValue.TEAMWORK, Connotation.POSITIVE],
+  ['spends time to answer questions', TeamValue.TEAMWORK, Connotation.POSITIVE],
+  ['is a good mentor', TeamValue.TEAMWORK, Connotation.POSITIVE],
+  ['treats others with respect', TeamValue.TEAMWORK, Connotation.POSITIVE],
+  ['actively participates in group meetings', TeamValue.TEAMWORK, Connotation.POSITIVE],
+  ['apologizes for failures', TeamValue.TEAMWORK, Connotation.POSITIVE],
+  ['is friendly', TeamValue.TEAMWORK, Connotation.POSITIVE],
+  ["respects other people's opinions", TeamValue.TEAMWORK, Connotation.POSITIVE],
+  ['is fair', TeamValue.TEAMWORK, Connotation.POSITIVE],
+  ['is judgemental', TeamValue.TEAMWORK, Connotation.NEGATIVE],
+  ['is open-minded', TeamValue.TEAMWORK, Connotation.POSITIVE],
+  ['is good at negotiations', TeamValue.TEAMWORK, Connotation.POSITIVE],
+  ['is good at coaching others', TeamValue.TEAMWORK, Connotation.POSITIVE],
+  ['expects others to take the lead', TeamValue.TEAMWORK, Connotation.NEGATIVE],
+  ['can lead a discussion', TeamValue.TEAMWORK, Connotation.POSITIVE],
+  ['is a good listener', TeamValue.TEAMWORK, Connotation.POSITIVE],
+  ['is passive', TeamValue.TEAMWORK, Connotation.NEGATIVE],
+  ['regularly supports me in my work', TeamValue.TEAMWORK, Connotation.POSITIVE],
+  ['rushes decisions', TeamValue.DELIVERY, Connotation.NEGATIVE],
+  ['avoids decisions', TeamValue.DELIVERY, Connotation.NEGATIVE],
+  ['takes responsibility for their actions', TeamValue.DELIVERY, Connotation.POSITIVE],
+  ['does reviews on time', TeamValue.DELIVERY, Connotation.POSITIVE],
+  ['is passionate about their work', TeamValue.DELIVERY, Connotation.POSITIVE],
+  ['can manage stress', TeamValue.DELIVERY, Connotation.POSITIVE],
+  ['keeps commitments', TeamValue.DELIVERY, Connotation.POSITIVE],
+  ['proactively uses feature flags', TeamValue.DELIVERY, Connotation.POSITIVE],
+  ['supports finishing team commitment of our sprints', TeamValue.DELIVERY, Connotation.POSITIVE],
+  ['delivered a feature that had a lot of uncertainty', TeamValue.DELIVERY, Connotation.POSITIVE],
+  ['shares their opinion actively', TeamValue.COMMUNICATION, Connotation.POSITIVE],
+  ['is the voice of reason', TeamValue.COMMUNICATION, Connotation.POSITIVE],
+  ['communicates well', TeamValue.COMMUNICATION, Connotation.POSITIVE],
+  ['communicates their actions well', TeamValue.COMMUNICATION, Connotation.POSITIVE],
+  ['speaks in understandable terms', TeamValue.COMMUNICATION, Connotation.POSITIVE],
+  ['gives clear status updates in the daily', TeamValue.COMMUNICATION, Connotation.POSITIVE],
+  ['clarifies questions early on', TeamValue.COMMUNICATION, Connotation.POSITIVE],
+  ['communicates complex ideas skillfully', TeamValue.COMMUNICATION, Connotation.POSITIVE],
+  ['takes ownership of their products', TeamValue.OWNERSHIP, Connotation.POSITIVE],
+  ['finishes their tasks before the end of the sprint', TeamValue.OWNERSHIP, Connotation.POSITIVE],
+  ['Helps improving our monitoring', TeamValue.OWNERSHIP, Connotation.POSITIVE],
+  ['is a great firefighter', TeamValue.OWNERSHIP, Connotation.POSITIVE],
+  ['acts responsibly', TeamValue.STRATEGIC, Connotation.POSITIVE],
+  ['executes requirements accurately', TeamValue.STRATEGIC, Connotation.POSITIVE],
+  ["brings the customer's perspective into discussions", TeamValue.STRATEGIC, 1],
+  ['Asks for details to understand the impact during refinement', TeamValue.STRATEGIC, 1],
+  ['involved in the definition of the team strategy', TeamValue.STRATEGIC, Connotation.POSITIVE],
+  ['advocates for the technical strategy', TeamValue.STRATEGIC, Connotation.POSITIVE],
+  ['understands our team goals', TeamValue.STRATEGIC, Connotation.POSITIVE],
+  ['acts according to our companies priorities', TeamValue.STRATEGIC, Connotation.POSITIVE],
+  ['exhibits leadership qualities in their position', TeamValue.MASTERY, Connotation.POSITIVE],
+  ['gives a professional impression', TeamValue.MASTERY, Connotation.POSITIVE],
+  ['delivers high quality work', TeamValue.MASTERY, Connotation.POSITIVE],
+  ['is pragmatic', TeamValue.MASTERY, Connotation.POSITIVE],
+  ['does careful reviews', TeamValue.MASTERY, Connotation.POSITIVE],
+  ['has a professional attitude', TeamValue.MASTERY, Connotation.POSITIVE],
+  ['is a role model', TeamValue.MASTERY, Connotation.POSITIVE],
+  ['can execute their tasks independently', TeamValue.MASTERY, Connotation.POSITIVE],
+  ['cares about quality', TeamValue.MASTERY, Connotation.POSITIVE],
+  ['is someone I can learn from', TeamValue.MASTERY, Connotation.POSITIVE],
+  ['is knowledgable', TeamValue.MASTERY, Connotation.POSITIVE],
+  ['works effectively', TeamValue.MASTERY, Connotation.POSITIVE],
+  ['is enjoyable to work with', TeamValue.MASTERY, Connotation.POSITIVE],
+  ['actively seeks solutions', TeamValue.MASTERY, Connotation.POSITIVE],
+  ['takes unnecessary risks', TeamValue.MASTERY, Connotation.NEGATIVE],
+  ['assesses risks before taking actions', TeamValue.MASTERY, Connotation.POSITIVE],
+  ['has endurance for the long haul', TeamValue.MASTERY, Connotation.POSITIVE],
+  ['can communicate a clear vision', TeamValue.MASTERY, Connotation.POSITIVE],
+  ['thinks in long term solutions instead of quick fixes', TeamValue.MASTERY, Connotation.POSITIVE],
+  ['pays attention to detail', TeamValue.MASTERY, Connotation.POSITIVE],
+  ['finds innovative solutions to problems', TeamValue.MASTERY, Connotation.POSITIVE],
+  ['is good at researching problems', TeamValue.MASTERY, Connotation.POSITIVE],
+  ['is good at troubleshooting', TeamValue.MASTERY, Connotation.POSITIVE],
+  ['is focused', TeamValue.MASTERY, Connotation.POSITIVE],
+  //
+  ['has team domain knowledge so that they can have effective discussions and make informed decisions', TeamValue.OWNERSHIP, Connotation.POSITIVE],
+  ['understands why they are doing what they are doing', TeamValue.OWNERSHIP, Connotation.POSITIVE],
 ];
 
 export class QuestionRepository {
-  getEngineerQuestions() {
-    return [
-      [
-        'Execution',
-        'Delivers against commitments with a high degree of accuracy and quality',
-      ],
-      [
-        'Consistency',
-        'Continually generates impactful results over extended periods of time',
-      ],
-      [
-        'Quality',
-        'Consistently writes production-ready code that is easily testable, understood by others and accounts for edge cases and errors',
-      ],
-      [
-        'Design & Architecture',
-        'Architects using accepted patterns, allowing for iterative, autonomous development and future scaling. Anticipates future use, making design decisions that minimise the cost of future changes.',
-      ],
-      [
-        'Problem Solving',
-        'Solve tough problems with insightful, practical solutions, making wise deicisions despite ambiguity and thinks strategically',
-      ],
-      [
-        'Curiosity',
-        'Demonstrates an active, open mind by uncovering and exploring big ideas that accelerate genuine progress for Funding Circle',
-      ],
-      [
-        'Accountability',
-        'Promotes a culture of openness, accountability and trust. Generates a progressive attitude through team norms and behaviours.',
-      ],
-      [
-        'Communication',
-        'Listens well and is concise and articulate. I treat people with respect and consideration',
-      ],
-      [
-        'Delivery',
-        'Shows a bias to actions, delivering excellent results over just following a process',
-      ],
-      [
-        'Grit',
-        'Steadfast in the pursuit of the goals of the organistaion, their teams, their colleagues and themselves.',
-      ],
-      [
-        'People Orientation',
-        'Provides support to colleagues, expresses gratitude, spreads knowledge and develops people outside formal reporting or team structures',
-      ],
-      [
-        'Emotional Intelligence',
-        'Takes time to understand what motivates other, shows empathy and deepens gneuine relationships with others',
-      ],
-      [
-        'Craft',
-        'Inspires others by passionately promoting practices to create excellent quality products and services',
-      ],
-      [
-        'Purpose',
-        'shows conviction over time, developing a sense of purpose for what they do',
-      ],
-    ];
-  }
-
-  getProductQuestions() {
-    return [
-      [
-        'Problem solving',
-        'They explain and simplify the problem space. They collaborate with you to find solutions and how it can be broken down.',
-      ],
-      [
-        'Domain knowledge',
-        'They understand the business and tech space to a deep level so that they can have effective discussions and make informed decisions with you. They can see things from your perspective and they can also challenge concepts and assumptions.',
-      ],
-      [
-        'Vision and Goals',
-        "They have a clear view of where we're, what we need to achieve as a team and why. You buy into this vision and the goals set by the Product Manager",
-      ],
-      [
-        'Communication',
-        "They are concise and articulate in their communication to you. You come away from interactions with a better understanding and clear actions, NOT confused. Thay use a variety of tools/techniques to make their communication effective. You feel they give you space to feedback and they take on what you say. They help you by re-clarifying thing if you don't understand.",
-      ],
-      [
-        'Accountability',
-        'They own the domain with you. They succeed and fail with you and help you through challenges.',
-      ],
-      [
-        'Roadmap',
-        "They layout a roadmap so that you clearly know the high level path to achieving the vision and goals they set out. You know what the current priorities are, what's happening now and what's coming next and byeond.",
-      ],
-      [
-        'Delivery',
-        'They support and motivate you through delivery. Clearing the way when blockers arise and/or supporting you when things are delivered.',
-      ],
-      [
-        'People Orientation',
-        "They support you as a team member by taking the time to help you understand issues, working with you on solving problems and delivering together. They protect and support you and the team when things aren't going well and/or they support your team through deliveries and issues.",
-      ],
-      [
-        'Adaptability',
-        'They are able to adapt to changing situations and uncertainty, covering where there are gaps and ensuring the team and the stakeholders keep moving as a whole.',
-      ],
-    ];
-  }
-
-  getDeliveryQuestions() {
-    return [
-      [
-        'Environment',
-        'Helps to create an environment in which team members feel more confident to personally commit to achieving the goals of the team.',
-      ],
-      [
-        'Empowerment',
-        'Empower the team members to have the courage to do the right thing and lean into tough problems.',
-      ],
-      [
-        'Focus',
-        'Supports the team members to focus on the teams immediate goals',
-      ],
-      [
-        'Transparency',
-        'Leads the way in fostering a culture of openness about the work and challenges faced in doing the work',
-      ],
-      [
-        'Culture',
-        'Promotes and enhances the levels of respect the team members have for each other and the belief that we are all capable independent people.',
-      ],
-      [
-        'Delivery',
-        'They support and motivate you through delivery. Clearing the way when blockers arise and/or supporting you when things are delivered.',
-      ],
-      [
-        'Adaptability',
-        'They are able to adapt to changing situations and uncertainty, covering where there are gaps and ensuring the team keeps moving as a whole.',
-      ],
-    ];
-  }
-
   findAll(): IQuestion[] {
     const dataArray = this.getRawDataArray();
-    const questions = QuestionFactory.createFromRawDataRows(dataArray);
+    const questions = QuestionFactory.createFromQuestionDataRows(dataArray);
 
     return QuestionRepository.shuffle(questions);
   }

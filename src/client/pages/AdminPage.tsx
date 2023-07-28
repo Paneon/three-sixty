@@ -3,7 +3,11 @@ import { Google } from '../../types/GoogleRunScript';
 import { serverFunctions } from '../utils/serverFunctions';
 import { isViewModel, ViewModel } from '../../types/ViewModel';
 import { AdminPageLayout } from '../components/AdminPage.layout';
-import { IErrorMessage, isErrorMessage } from '../../types/Error';
+import {
+  IErrorMessage,
+  isErrorMessage,
+  isErrorResponse,
+} from '../../types/Error';
 
 declare const google: Google;
 
@@ -14,6 +18,7 @@ export type TOnRemovePerson = (
 ) => void;
 export type TOnAddTeam = (teamName: string) => void;
 export type TOnRemoveTeam = (teamName: string) => void;
+export type TOnRunFeedbackRound = (teamName: string) => void;
 
 export type TOnAddPerson = (
   firstName: string,
@@ -33,6 +38,7 @@ export const AdminPage = () => {
 
   const onSuccessHandler = (responseData: ViewModel[] | IErrorMessage) => {
     setIsLoading(false);
+    console.log('onSuccess', responseData);
 
     if (
       Array.isArray(responseData) &&
@@ -50,9 +56,18 @@ export const AdminPage = () => {
     throw Error('Invalid Response Data: ' + JSON.stringify(responseData));
   };
 
-  const onErrorHandler = (error: IErrorMessage) => {
+  const onErrorHandler = (error: unknown) => {
     setIsLoading(false);
-    setError(error.error);
+    console.warn('GAS Server Error');
+    console.dir(error);
+
+    if (isErrorResponse(error)) {
+      const message = `${error.message} ${error.stack}`;
+      console.log(message);
+      setError(message);
+    } else {
+      setError(error as string);
+    }
   };
 
   const handleAddTeam = (teamName: string) => {
@@ -105,6 +120,16 @@ export const AdminPage = () => {
       .catch(onErrorHandler);
   };
 
+  const triggerFeedbackRound: TOnRunFeedbackRound = (teamName: string) => {
+    setIsLoading(true);
+    serverFunctions
+      .runFeedbackRound(teamName)
+      .then((teamName: string) => {
+        setIsLoading(false);
+      })
+      .catch(onErrorHandler);
+  };
+
   useEffect(() => {
     setIsLoading(true);
     serverFunctions.getTeams().then(onSuccessHandler).catch(onErrorHandler);
@@ -120,6 +145,7 @@ export const AdminPage = () => {
       onRemovePerson={handleOnRemovePerson}
       onAddTeam={handleAddTeam}
       onRemoveTeam={handleRemoveTeam}
+      onRunFeedbackRound={triggerFeedbackRound}
     />
   );
 };

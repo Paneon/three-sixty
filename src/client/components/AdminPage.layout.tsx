@@ -10,6 +10,7 @@ import {
   TOnAddTeam,
   TOnRemovePerson,
   TOnRemoveTeam,
+  TOnRunFeedbackRound,
 } from '../pages/AdminPage';
 import { LoadingProgressBar } from './LoadingProgressBar';
 
@@ -22,6 +23,7 @@ interface Props {
   onRemoveTeam: TOnRemoveTeam;
   onAddPerson: TOnAddPerson;
   onRemovePerson: TOnRemovePerson;
+  onRunFeedbackRound: TOnRunFeedbackRound;
 }
 
 export const AdminPageLayout = ({
@@ -33,6 +35,7 @@ export const AdminPageLayout = ({
   onRemoveTeam,
   onAddPerson,
   onRemovePerson,
+  onRunFeedbackRound,
 }: Props) => {
   const [showModal, setShowModal] = useState(false);
 
@@ -58,6 +61,7 @@ export const AdminPageLayout = ({
               onRemovePerson={onRemovePerson}
               onRemoveTeam={onRemoveTeam}
               onAddPerson={onAddPerson}
+              onRunFeedbackRound={onRunFeedbackRound}
             />
 
             <Button

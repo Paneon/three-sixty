@@ -8,14 +8,16 @@ interface ErrorProps {
 export const ErrorNotification = ({ errorMessage = null }: ErrorProps) => {
   const [error, setError] = useState<string | null>(errorMessage);
 
-  if (!error) {
+  const showError = error !== '' && error !== null;
+
+  if (!showError) {
     return null;
   }
 
   return (
     <Toast
       className="my-4"
-      show={!!error}
+      show={true}
       bg="warning"
       onClose={() => setError(null)}
     >

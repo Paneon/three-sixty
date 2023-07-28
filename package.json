@@ -1,6 +1,6 @@
 {
   "name": "three-sixty",
-  "version": "1.0.7",
+  "version": "1.0.23",
   "description": "A simple three sixty feedback tool",
   "repository": {
     "type": "git",
@@ -9,14 +9,15 @@
   "scripts": {
     "test": "vitest",
     "login": "clasp login",
-    "setup": "rimraf .clasp.json && mkdirp dist && clasp create --type sheets --title \"My React Project\" --rootDir ./dist && mv ./dist/.clasp.json ./.clasp.json && rimraf dist",
+    "setup": "rimraf .clasp.json && mkdirp dist && clasp create --type sheets --title \"Three Sixty\" --rootDir ./dist && mv ./dist/.clasp.json ./.clasp.json && rimraf dist",
     "open": "clasp open --addon",
     "setup:https": "mkdir certs && mkcert -key-file ./certs/key.pem -cert-file ./certs/cert.pem localhost 127.0.0.1",
+    "version:patch": "npm version patch --no-git-tag-version",
     "build:dev:watch": "cross-env NODE_ENV=development webpack --watch",
-    "build:dev": "npm version patch --no-git-tag-version && cross-env NODE_ENV=development webpack",
-    "build": "npm version patch --no-git-tag-version && cross-env NODE_ENV=production webpack",
-    "deploy:dev": "rimraf dist && npm run build:dev && npx clasp push",
-    "deploy": "rimraf dist && npm run build && npx clasp push",
+    "build:dev": "cross-env NODE_ENV=development webpack",
+    "build": "cross-env NODE_ENV=production webpack",
+    "deploy:dev": "npm run version:patch && rimraf dist && npm run build:dev && npx clasp push",
+    "deploy": "npm run version:patch && rimraf dist && npm run build && npx clasp push",
     "serve": "cross-env NODE_ENV=development webpack serve",
     "start": "npm run deploy:dev && npm run serve",
     "lint": "eslint ./src/ --ext .ts,.tsx --fix",

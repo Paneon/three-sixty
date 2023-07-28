@@ -3,6 +3,7 @@ import { Person } from '../models/Person';
 
 export class PersonFactory {
   static createFromRow(row: string[]): Person {
+    // [firstName, lastName, email, pfid, tfid, psid, tsid, role, peers]
     return new Person(
       row[PersonRowColum.FIRST_NAME],
       row[PersonRowColum.LAST_NAME],

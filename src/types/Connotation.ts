@@ -1,4 +1,4 @@
 export enum Connotation {
-  NEGATIVE,
-  POSITIVE,
+  NEGATIVE = 0,
+  POSITIVE = 1,
 }

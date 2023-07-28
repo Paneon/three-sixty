@@ -21,51 +21,27 @@ export class FormService {
 
   private addFeedbackTail(form: Form) {
     form.addPageBreakItem().setTitle('General Feedback');
-    form
-      .addTextItem()
-      .setTitle(`Generally, what things should your colleague keep on doing?`)
-      .setRequired(true);
-    form
-      .addTextItem()
-      .setTitle(`What things could your colleague focus on improving?`)
-      .setRequired(true);
+    form.addTextItem().setTitle(`Generally, what things should your colleague keep on doing?`).setRequired(false);
+    form.addTextItem().setTitle(`What things could your colleague focus on improving?`).setRequired(false);
     return form;
   }
 
   private addReflectionTail(form: Form) {
     form.addPageBreakItem().setTitle('General Feedback');
-    form
-      .addTextItem()
-      .setTitle(`Generally, what things should you keep on doing?`)
-      .setRequired(true);
-    form
-      .addTextItem()
-      .setTitle(`What do you see as areas of improvement for yourself?`)
-      .setRequired(true);
+    form.addTextItem().setTitle(`Generally, what things should you keep on doing?`).setRequired(false);
+    form.addTextItem().setTitle(`What do you see as areas of improvement for yourself?`).setRequired(false);
     return form;
   }
 
-  public createSelfReflectionForm() {
-    return this.createPolarForm(
-      `Self-Reflection`,
-      `Please give a couple of questions about how you see yourself.`,
-      true,
-    );
+  public createSelfReflectionForm(name: string, teamName: string) {
+    return this.createPolarForm(`${teamName} - ${name}'s Self-Reflection`, `Please answer a couple of questions about how you see yourself.`, true);
   }
 
-  public createFeedbackForm(name: string) {
-    return this.createPolarForm(
-      `${name}'s Team Feedback`,
-      `Please answer a couple of questions about ${name}.`,
-      false,
-    );
+  public createFeedbackForm(name: string, teamName: string) {
+    return this.createPolarForm(`${teamName} - Team Feedback for ${name}`, `Please answer a couple of questions about how you see ${name}.`, false);
   }
 
-  public createPolarForm(
-    title: string,
-    description: string,
-    isPersonal: boolean,
-  ): Form {
+  public createPolarForm(title: string, description: string, isPersonal: boolean): Form {
     const questions = this.questionRepository.findAll();
 
     let form: Form;
@@ -94,10 +70,7 @@ export class FormService {
 
         const gridItem = form.addGridItem();
 
-        gridItem
-          .setTitle(`Statements`)
-          .setRows(page.questionTitles)
-          .setColumns([Answer.YES, Answer.NO]);
+        gridItem.setTitle(`Statements`).setRows(page.questionTitles).setColumns([Answer.YES, Answer.NO]);
 
         this.addCAT(form);
       });
@@ -112,9 +85,7 @@ export class FormService {
       this.addCAT(form);
     }
 
-    form = isPersonal
-      ? this.addReflectionTail(form)
-      : this.addFeedbackTail(form);
+    form = isPersonal ? this.addReflectionTail(form) : this.addFeedbackTail(form);
 
     return form;
   }
@@ -125,23 +96,16 @@ export class FormService {
     const img = UrlFetchApp.fetch('https://loremflickr.com/400/400/cute,pet');
 
     // Sets the image, title, and description for the item.
-    item
-      .setTitle('Well done! Here is an image of a cute pet to freshen up.')
-      .setImage(img);
+    item.setTitle('Well done! Here is an image of a cute pet to freshen up.').setImage(img);
   }
 
-  public splitQuestionsIntoPages(
-    questions: IQuestion[],
-    pageSize: number,
-  ): IPage[] {
+  public splitQuestionsIntoPages(questions: IQuestion[], pageSize: number): IPage[] {
     let index = 0;
     const arrayLength = questions.length;
     const pages: IPage[] = [];
 
     for (index = 0; index < arrayLength; index += pageSize) {
-      const chunk = questions
-        .slice(index, index + pageSize)
-        .map((q) => q.title);
+      const chunk = questions.slice(index, index + pageSize).map((q) => q.title);
 
       pages.push({
         questionTitles: chunk,

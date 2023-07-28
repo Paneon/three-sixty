@@ -40,6 +40,7 @@ const defaultProps = {
   onRemoveTeam: () => {},
   onAddPerson: () => {},
   onRemovePerson: () => {},
+  onRunFeedbackRound: () => {},
 };
 
 // More on interaction testing: https://storybook.js.org/docs/react/writing-tests/interaction-testing
@@ -66,6 +67,19 @@ export const WithProgressBar: Story = {
   args: {
     ...defaultProps,
     progress: 30,
+    teams: [
+      {
+        teamName: 'Apollo',
+        members: [mockPerson1, mockPerson2],
+      },
+    ],
+  },
+};
+
+export const WithError: Story = {
+  args: {
+    ...defaultProps,
+    error: 'GAS Server Error',
     teams: [
       {
         teamName: 'Apollo',
