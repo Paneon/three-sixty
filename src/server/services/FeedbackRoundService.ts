@@ -65,7 +65,7 @@ export class FeedbackRoundService {
       });
   }
 
-  public calculateChunkSize(team: Person[]) {
+  public calculateChunkSize(team: Person[]): number {
     return team.length > MAX_FEEDBACK_RECEIVERS ? MAX_FEEDBACK_RECEIVERS : team.length - 1;
   }
 
