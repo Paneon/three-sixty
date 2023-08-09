@@ -1,15 +1,9 @@
 import { Email } from '../../../namespaces/Email';
-import { DEFAULT_RESULTS_SHEET, DEFAULT_SHEET } from '../../shared/config';
+import { DEFAULT_RESULTS_SHEET, DEFAULT_SHEET, MAX_FEEDBACK_RECEIVERS } from '../../shared/config';
 import { PersonFactory } from '../factories/PersonFactory';
 import { Person } from '../models/Person';
 import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
 import { TeamMemberWithPeers } from '../models/TeamMemberWithPeers';
-
-/**
- * if there are more than chunkSize number of people limit the number of forms
- * each person receives
- */
-const MAX_FEEDBACK_RECEIVERS = 10;
 
 export class FeedbackRoundService {
   run(teamSheet: Sheet) {
@@ -27,16 +21,10 @@ export class FeedbackRoundService {
   }
 
   public manageSpreadsheetForTeamMember(teamMember: TeamMemberWithPeers) {
-    const personalSpreadsheet = SpreadsheetApp.openById(
-      teamMember.personalSpreadsheetId!,
-    );
-    const personalResultsSheet = personalSpreadsheet.getSheetByName(
-      DEFAULT_RESULTS_SHEET,
-    );
+    const personalSpreadsheet = SpreadsheetApp.openById(teamMember.personalSpreadsheetId!);
+    const personalResultsSheet = personalSpreadsheet.getSheetByName(DEFAULT_RESULTS_SHEET);
 
-    const numberOfRounds = personalSpreadsheet
-      .getSheets()
-      .filter((sheet) => sheet.getName() !== DEFAULT_SHEET).length;
+    const numberOfRounds = personalSpreadsheet.getSheets().filter((sheet) => sheet.getName() !== DEFAULT_SHEET).length;
 
     const newSheetRequired = personalResultsSheet.getLastRow() > 1;
     if (newSheetRequired) {
@@ -44,12 +32,8 @@ export class FeedbackRoundService {
         template: personalResultsSheet,
       });
     }
-    const teamSpreadSheet = SpreadsheetApp.openById(
-      teamMember.teamSpreadsheetId!,
-    );
-    const teamResultsSheet = teamSpreadSheet.getSheetByName(
-      DEFAULT_RESULTS_SHEET,
-    );
+    const teamSpreadSheet = SpreadsheetApp.openById(teamMember.teamSpreadsheetId!);
+    const teamResultsSheet = teamSpreadSheet.getSheetByName(DEFAULT_RESULTS_SHEET);
 
     if (newSheetRequired) {
       teamSpreadSheet.insertSheet(`Form Responses ${numberOfRounds + 1}`, {
@@ -59,30 +43,16 @@ export class FeedbackRoundService {
   }
 
   public sendEmailToTeamMember(teamMember: TeamMemberWithPeers) {
-    const personalFormUrl = FormApp.openById(
-      teamMember.personalFormId!,
-    ).getPublishedUrl();
+    const personalFormUrl = FormApp.openById(teamMember.personalFormId!).getPublishedUrl();
 
-    Email.sendEmail(
-      teamMember.email,
-      'New 360 Feedback Round',
-      teamMember,
-      personalFormUrl,
-    );
+    Email.sendEmail(teamMember.email, 'New 360 Feedback Round', teamMember, personalFormUrl);
   }
 
-  public assignPeers(
-    team: Person[],
-    chunkSize: number,
-    rotatedPeers: Person[],
-  ): TeamMemberWithPeers[] {
+  public assignPeers(team: Person[], chunkSize: number, rotatedPeers: Person[]): TeamMemberWithPeers[] {
     return team.map((person, index) => {
       const startIndex = index * chunkSize;
       const endIndex = startIndex + chunkSize;
-      return new TeamMemberWithPeers(
-        person,
-        rotatedPeers.slice(startIndex, endIndex),
-      );
+      return new TeamMemberWithPeers(person, rotatedPeers.slice(startIndex, endIndex));
     });
   }
 
@@ -96,17 +66,11 @@ export class FeedbackRoundService {
   }
 
   public calculateChunkSize(team: Person[]) {
-    return team.length > MAX_FEEDBACK_RECEIVERS
-      ? MAX_FEEDBACK_RECEIVERS
-      : team.length - 1;
+    return team.length > MAX_FEEDBACK_RECEIVERS ? MAX_FEEDBACK_RECEIVERS : team.length - 1;
   }
 
   public rotatePeers(allFeedbackRequests: Person[]) {
-    return [
-      allFeedbackRequests[allFeedbackRequests.length - 1],
-      ...allFeedbackRequests.slice(1, allFeedbackRequests.length - 1),
-      allFeedbackRequests[0],
-    ];
+    return [allFeedbackRequests[allFeedbackRequests.length - 1], ...allFeedbackRequests.slice(1, allFeedbackRequests.length - 1), allFeedbackRequests[0]];
   }
 
   public multiplyArray<T>(arr: T[], times: number): T[] {

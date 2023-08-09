@@ -180,9 +180,7 @@ const DynamicCdnWebpackPluginConfig = {
           name: packageName,
           var: 'MaterialUI',
           version: packageVersion,
-          url: `https://unpkg.com/@mui/material@${packageVersion}/umd/material-ui.${
-            isProd ? 'production.min.js' : 'development.js'
-          }`,
+          url: `https://unpkg.com/@mui/material@${packageVersion}/umd/material-ui.${isProd ? 'production.min.js' : 'development.js'}`,
         };
       case '@emotion/react':
         return {
@@ -367,15 +365,12 @@ const serverConfig = {
       autoGlobalExportsFiles: [serverEntry],
     }),
     new webpack.DefinePlugin({
-      'process.env.QUESTIONS_PER_PAGE': JSON.stringify(
-        envVars.QUESTIONS_PER_PAGE,
-      ),
+      'process.env.QUESTIONS_PER_PAGE': JSON.stringify(envVars.QUESTIONS_PER_PAGE),
       'process.env.FORM_TEMPLATE': JSON.stringify(envVars.FORM_TEMPLATE),
+      'process.env.MAX_FEEDBACK_RECEIVERS': JSON.stringify(envVars.MAX_FEEDBACK_RECEIVERS),
       'process.env.DRIVE_FOLDER': JSON.stringify(envVars.DRIVE_FOLDER),
       'process.env.DEFAULT_SHEET': JSON.stringify(envVars.DEFAULT_SHEET),
-      'process.env.DEFAULT_RESULTS_SHEET': JSON.stringify(
-        envVars.DEFAULT_RESULTS_SHEET,
-      ),
+      'process.env.DEFAULT_RESULTS_SHEET': JSON.stringify(envVars.DEFAULT_RESULTS_SHEET),
       'process.env.VERSION': JSON.stringify(process.env.npm_package_version),
     }),
   ],

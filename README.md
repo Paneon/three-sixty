@@ -39,7 +39,7 @@ errors until it is complete.
 clasp create --type webapp
 ```
 
-Then update your appsscript.json to the following:
+Then update the created appsscript.json to match your timezone:
 
 ```json
 {
@@ -54,14 +54,18 @@ Then update your appsscript.json to the following:
 }
 ```
 
-finally to deploy and view your webapp
+At this point you can glance into the `.env.dist` file and decide if you want to customize some of the provided options.
+You do this by creating a copy of it with the name `.env` and uncomment the lines you want to adjust.
+
+This command will build your app, push it to the server and deploy it.
 
 ```sh
-clasp push && clasp deploy
+npm run deploy
 ```
 
 Before you can use the application you'll need to give it permission to access
-certain google resources. For this you need to wait until the deployment has uploaded the script files and they are visible in the "Files" area of the Web-Editor.
+certain google resources. For this you need to wait until the deployment has uploaded the script files, 
+and they are visible in the "Files" area of the Web-Editor.
 To find the Web-Editor, navigate to: [Google apps scripts](https://script.google.com) and open the `Three-sixty` project.
 Once the `App.gs` is available, activate it and click on `Run` > `Run function` > `any function is fine` in the navigation
 bar. This will open a prompt and ask you to give this script the permissions it requires.
