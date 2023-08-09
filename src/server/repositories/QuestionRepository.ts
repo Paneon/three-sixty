@@ -12,6 +12,7 @@ const RawQuestionArray: QuestionDataRow[] = [
   ['self-drives their development', TeamValue.SEEK_TO_IMPROVE, Connotation.POSITIVE],
   ['gives useful feedback to me', TeamValue.SEEK_TO_IMPROVE, Connotation.POSITIVE],
   ['regularly shares knowledge', TeamValue.SEEK_TO_IMPROVE, Connotation.POSITIVE],
+
   ['appears to meetings on time', TeamValue.TEAMWORK, Connotation.POSITIVE],
   ['is empathetic', TeamValue.TEAMWORK, Connotation.POSITIVE],
   ["values other people's opinions", TeamValue.TEAMWORK, Connotation.POSITIVE],
@@ -33,6 +34,8 @@ const RawQuestionArray: QuestionDataRow[] = [
   ['is a good listener', TeamValue.TEAMWORK, Connotation.POSITIVE],
   ['is passive', TeamValue.TEAMWORK, Connotation.NEGATIVE],
   ['regularly supports me in my work', TeamValue.TEAMWORK, Connotation.POSITIVE],
+  ['is enjoyable to work with', TeamValue.TEAMWORK, Connotation.POSITIVE],
+
   ['rushes decisions', TeamValue.DELIVERY, Connotation.NEGATIVE],
   ['avoids decisions', TeamValue.DELIVERY, Connotation.NEGATIVE],
   ['takes responsibility for their actions', TeamValue.DELIVERY, Connotation.POSITIVE],
@@ -43,6 +46,7 @@ const RawQuestionArray: QuestionDataRow[] = [
   ['proactively uses feature flags', TeamValue.DELIVERY, Connotation.POSITIVE],
   ['supports finishing team commitment of our sprints', TeamValue.DELIVERY, Connotation.POSITIVE],
   ['delivered a feature that had a lot of uncertainty', TeamValue.DELIVERY, Connotation.POSITIVE],
+
   ['shares their opinion actively', TeamValue.COMMUNICATION, Connotation.POSITIVE],
   ['is the voice of reason', TeamValue.COMMUNICATION, Connotation.POSITIVE],
   ['communicates well', TeamValue.COMMUNICATION, Connotation.POSITIVE],
@@ -55,6 +59,10 @@ const RawQuestionArray: QuestionDataRow[] = [
   ['finishes their tasks before the end of the sprint', TeamValue.OWNERSHIP, Connotation.POSITIVE],
   ['Helps improving our monitoring', TeamValue.OWNERSHIP, Connotation.POSITIVE],
   ['is a great firefighter', TeamValue.OWNERSHIP, Connotation.POSITIVE],
+  ['has team domain knowledge so that they can have effective discussions and make informed decisions', TeamValue.OWNERSHIP, Connotation.POSITIVE],
+  ['makes informed decisions in our domain', TeamValue.OWNERSHIP, Connotation.POSITIVE],
+  ['understands why they are doing what they are doing', TeamValue.OWNERSHIP, Connotation.POSITIVE],
+
   ['acts responsibly', TeamValue.STRATEGIC, Connotation.POSITIVE],
   ['executes requirements accurately', TeamValue.STRATEGIC, Connotation.POSITIVE],
   ["brings the customer's perspective into discussions", TeamValue.STRATEGIC, 1],
@@ -63,6 +71,7 @@ const RawQuestionArray: QuestionDataRow[] = [
   ['advocates for the technical strategy', TeamValue.STRATEGIC, Connotation.POSITIVE],
   ['understands our team goals', TeamValue.STRATEGIC, Connotation.POSITIVE],
   ['acts according to our companies priorities', TeamValue.STRATEGIC, Connotation.POSITIVE],
+
   ['exhibits leadership qualities in their position', TeamValue.MASTERY, Connotation.POSITIVE],
   ['gives a professional impression', TeamValue.MASTERY, Connotation.POSITIVE],
   ['delivers high quality work', TeamValue.MASTERY, Connotation.POSITIVE],
@@ -75,7 +84,6 @@ const RawQuestionArray: QuestionDataRow[] = [
   ['is someone I can learn from', TeamValue.MASTERY, Connotation.POSITIVE],
   ['is knowledgable', TeamValue.MASTERY, Connotation.POSITIVE],
   ['works effectively', TeamValue.MASTERY, Connotation.POSITIVE],
-  ['is enjoyable to work with', TeamValue.MASTERY, Connotation.POSITIVE],
   ['actively seeks solutions', TeamValue.MASTERY, Connotation.POSITIVE],
   ['takes unnecessary risks', TeamValue.MASTERY, Connotation.NEGATIVE],
   ['assesses risks before taking actions', TeamValue.MASTERY, Connotation.POSITIVE],
@@ -87,9 +95,6 @@ const RawQuestionArray: QuestionDataRow[] = [
   ['is good at researching problems', TeamValue.MASTERY, Connotation.POSITIVE],
   ['is good at troubleshooting', TeamValue.MASTERY, Connotation.POSITIVE],
   ['is focused', TeamValue.MASTERY, Connotation.POSITIVE],
-  //
-  ['has team domain knowledge so that they can have effective discussions and make informed decisions', TeamValue.OWNERSHIP, Connotation.POSITIVE],
-  ['understands why they are doing what they are doing', TeamValue.OWNERSHIP, Connotation.POSITIVE],
 ];
 
 export class QuestionRepository {
