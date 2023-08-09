@@ -1,3 +1,5 @@
+import { PersonRow, RowFactory } from '../factories/RowFactory';
+
 export class Person {
   constructor(
     public firstName: string,
@@ -12,5 +14,9 @@ export class Person {
 
   get name() {
     return this.firstName + ' ' + this.lastName;
+  }
+
+  public toRow(): PersonRow {
+    return RowFactory.createTeamMemberRowFromPerson(this);
   }
 }

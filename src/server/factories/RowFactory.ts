@@ -11,6 +11,17 @@ export enum PersonRowColum {
   ROLE = 7,
 }
 
+export type PersonRow = [
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+];
+
 export class RowFactory {
   static createPersonOfTeamRow(
     person: Person,
@@ -18,7 +29,7 @@ export class RowFactory {
     personalSpreadsheetId,
     teamFormId,
     teamSpreadsheetId,
-  ): string[] {
+  ): PersonRow {
     return [
       person.firstName,
       person.lastName,
@@ -28,6 +39,19 @@ export class RowFactory {
       personalSpreadsheetId,
       teamSpreadsheetId,
       person.role,
-    ] as string[];
+    ] as PersonRow;
+  }
+
+  static createTeamMemberRowFromPerson(person: Person): PersonRow {
+    return [
+      person.firstName,
+      person.lastName,
+      person.email,
+      person.personalFormId ?? '',
+      person.teamFormId ?? '',
+      person.personalSpreadsheetId ?? '',
+      person.teamSpreadsheetId ?? '',
+      person.role ?? '',
+    ] as PersonRow;
   }
 }

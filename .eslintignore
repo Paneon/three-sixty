@@ -4,3 +4,4 @@
 *.stories.ts
 webpack.config.js
 namespaces/*
+tests/*

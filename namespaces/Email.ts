@@ -1,13 +1,23 @@
+import { TeamMemberWithPeers } from '../src/server/models/TeamMemberWithPeers';
+
 export namespace Email {
-  export function sendEmail(email, subject, bodyData) {
+  export function sendEmail(
+    email,
+    subject,
+    person: TeamMemberWithPeers,
+    personalFormUrl,
+  ) {
     MailApp.sendEmail({
       to: email,
       subject: subject,
-      htmlBody: emailBody(bodyData),
+      htmlBody: emailBody(person, personalFormUrl),
     });
   }
 
-  const emailBody = ({ firstName, personalFormUrl, peers }) => {
+  const emailBody = (
+    teamMemberWithPeers: TeamMemberWithPeers,
+    personalFormUrl,
+  ) => {
     return `
     <!doctype html>
 <html>
@@ -304,7 +314,7 @@ export namespace Email {
                     <tr>
                       <td>
                         <h1>New 360° Feedback Round</h1>
-                        <p>Hi ${firstName},</p>
+                        <p>Hi ${teamMemberWithPeers.firstName},</p>
                         <p>It's that time again: to get your continuous improvement hat on and reflect on yourself over the last few weeks and months. As with anything the more you put into this the more you'll get out so please do go take a break, have a think and pour your thoughts into the following questions:</p>
                         <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
@@ -322,20 +332,12 @@ export namespace Email {
                           </tbody>
                         </table>
                         <p>A crucial part of this process is also to have a think about the other members of your team and give them the same thoughtful feedback that you would like to receive. So could you answer the following questionaires for your team members:</p>
-                        ${peers
-                          .map(
-                            ([
-                              firstName,
-                              lastName,
-                              email,
-                              pfid,
-                              tfid,
-                              psid,
-                              tsid,
-                            ]) => {
-                              const formUrl =
-                                FormApp.openById(tfid).getPublishedUrl();
-                              const button = `
+                        ${teamMemberWithPeers.peers
+                          .map((peer) => {
+                            const formUrl = FormApp.openById(
+                              peer.teamFormId!,
+                            ).getPublishedUrl();
+                            return `
                         <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
                             <tr>
@@ -343,7 +345,7 @@ export namespace Email {
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <td> <a href="${formUrl}" target="_blank">${firstName} ${lastName}'s Feedback Form</a> </td>
+                                      <td> <a href="${formUrl}" target="_blank">${peer.firstName} ${peer.lastName}'s Feedback Form</a> </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -351,9 +353,7 @@ export namespace Email {
                             </tr>
                           </tbody>
                         </table>`;
-                              return button;
-                            },
-                          )
+                          })
                           .join('')}
 
                         <p>If there are any issues with any of the above just let me know</p>

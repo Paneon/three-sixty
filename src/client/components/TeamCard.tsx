@@ -6,8 +6,11 @@ import {
   TOnAddPerson,
   TOnRemovePerson,
   TOnRemoveTeam,
+  TOnRunFeedbackRound,
 } from '../pages/AdminPage';
 import ModalAddPerson from './ModalAddPerson';
+import { ModalConfirmRunFeedbackRound } from './ModalConfirmRunFeedbackRound';
+import { ModalConfirmDeleteTeam } from './ModalConfirmDeleteTeam';
 
 interface TeamCardProps {
   teamName: string;
@@ -15,6 +18,7 @@ interface TeamCardProps {
   onRemovePerson: TOnRemovePerson;
   onRemoveTeam: TOnRemoveTeam;
   onAddPerson: TOnAddPerson;
+  onRunFeedbackRound: TOnRunFeedbackRound;
 }
 export const TeamCard = ({
   teamName,
@@ -22,20 +26,29 @@ export const TeamCard = ({
   onRemovePerson,
   onRemoveTeam,
   onAddPerson,
+  onRunFeedbackRound,
 }: TeamCardProps) => {
   const [showModal, setShowModal] = useState(false);
+  const [showConfirmRunModal, setShowConfirmRunModal] = useState(false);
+  const [showConfirmDeleteTeam, setShowConfirmDeleteTeam] = useState(false);
 
   const showAddMemberModal = () => {
     setShowModal(true);
   };
 
-  const showRunFeedbackRoundModal = () => {};
+  const showRunFeedbackRoundModal = () => {
+    setShowConfirmRunModal(true);
+  };
+  const showConfirmDeletionModal = () => {
+    setShowConfirmDeleteTeam(true);
+  };
 
   const handleOnRemove = (firstName: string, lastName: string) => {
     onRemovePerson(firstName, lastName, teamName);
   };
 
   const handleRemoveTeam = () => {
+    setShowConfirmDeleteTeam(false);
     onRemoveTeam(teamName);
   };
 
@@ -50,6 +63,24 @@ export const TeamCard = ({
           onAddPerson={onAddPerson}
           teamName={teamName}
           onHide={() => setShowModal(false)}
+        />
+        <ModalConfirmRunFeedbackRound
+          show={showConfirmRunModal}
+          teamName={teamName}
+          onHide={() => setShowConfirmRunModal(false)}
+          onConfirm={onRunFeedbackRound}
+        />
+        <ModalConfirmRunFeedbackRound
+          show={showConfirmRunModal}
+          teamName={teamName}
+          onHide={() => setShowConfirmRunModal(false)}
+          onConfirm={onRunFeedbackRound}
+        />
+        <ModalConfirmDeleteTeam
+          show={showConfirmDeleteTeam}
+          teamName={teamName}
+          onHide={() => setShowConfirmDeleteTeam(false)}
+          onConfirm={handleRemoveTeam}
         />
         <table className="table is-fullwidth is-hoverable">
           <thead>
@@ -89,7 +120,7 @@ export const TeamCard = ({
         >
           Run new feedback round
         </Button>
-        <Button variant="warning" onClick={handleRemoveTeam}>
+        <Button variant="warning" onClick={showConfirmDeletionModal}>
           Delete Team
         </Button>
       </Card.Footer>

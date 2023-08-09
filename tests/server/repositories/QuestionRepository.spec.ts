@@ -1,5 +1,5 @@
-import { QuestionRepository } from './QuestionRepository';
-import { QuestionDataRow } from '../factories/QuestionFactory';
+import { QuestionRepository } from '../../../src/server/repositories/QuestionRepository';
+import { QuestionDataRow } from '../../../src/server/factories/QuestionFactory';
 import { describe, expect, test, vi } from 'vitest';
 
 describe('QuestionRepository', () => {

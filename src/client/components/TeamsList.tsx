@@ -5,6 +5,7 @@ import {
   TOnAddPerson,
   TOnRemovePerson,
   TOnRemoveTeam,
+  TOnRunFeedbackRound,
 } from '../pages/AdminPage';
 
 interface Props {
@@ -12,12 +13,14 @@ interface Props {
   onRemovePerson: TOnRemovePerson;
   onRemoveTeam: TOnRemoveTeam;
   onAddPerson: TOnAddPerson;
+  onRunFeedbackRound: TOnRunFeedbackRound;
 }
 export const TeamsList = ({
   teams,
   onRemovePerson,
   onRemoveTeam,
   onAddPerson,
+  onRunFeedbackRound,
 }: Props) => {
   return (
     <>
@@ -30,6 +33,7 @@ export const TeamsList = ({
             onRemovePerson={onRemovePerson}
             onRemoveTeam={onRemoveTeam}
             onAddPerson={onAddPerson}
+            onRunFeedbackRound={onRunFeedbackRound}
           />
         );
       })}
