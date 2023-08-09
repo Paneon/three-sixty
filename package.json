@@ -63,7 +63,7 @@
     "@effortlessmotion/html-webpack-inline-source-plugin": "^1.0.3",
     "@google/clasp": "^2.4.1",
     "@storybook/addon-essentials": "^7.1.0",
-    "@storybook/addon-interactions": "^7.1.0",
+    "@storybook/addon-interactions": "^7.2.1",
     "@storybook/addon-links": "^7.1.0",
     "@storybook/addon-onboarding": "^1.0.8",
     "@storybook/blocks": "^7.1.0",
