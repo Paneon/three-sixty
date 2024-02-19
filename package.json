@@ -97,7 +97,7 @@
     "eslint-plugin-react": "^7.30.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-standard": "^5.0.0",
-    "eslint-plugin-storybook": "^0.6.13",
+    "eslint-plugin-storybook": "^0.8.0",
     "gas-client": "^1.1.1",
     "gas-lib": "^2.0.4",
     "gas-types-detailed": "^1.1.0",
